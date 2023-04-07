@@ -1,0 +1,119 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 2022. 6. 10., 오후 2:39:47
+    Author     : skylo
+*/
+
+
+root { 
+    display: block;
+}
+
+body {
+    background-color: rgb(200, 251, 196);
+    /* background-image: url(/webmail2010/images/bg_image.jpg); */
+}
+
+table {
+    margin: 0px 15px 0 15px;
+    border: thin solid black;
+}
+
+td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+}
+
+th {
+    background-color:  gray;
+    color: white;
+}
+
+
+td#sender {
+    width: 20%;
+}
+
+td#date {
+    width: 22%;
+}
+
+
+td#subject {
+    text-align: left;
+    width: 50%;
+}
+
+
+#login_header {
+    font-size: 200%;
+    color: navy;
+    border-bottom: solid;
+}
+
+#login_form {
+    text-align: center;
+    margin: 100px 10px 100px 10px;
+}
+
+#login_fail {
+    color: fuchsia;
+    margin: 100px 200px 100px 200px;
+    padding: 50px;
+    line-height: 200%;
+    /* border: red ridge medium; */
+}
+
+#sidebar {
+    margin: 20px 10px 10px 10px;
+    padding: 10px;
+    width: 150px;
+    float: left;
+}
+
+#main {
+    margin-top: 50px;
+    margin-left: 190px;
+    text-align: left;
+}
+
+#addrbook, #msgBody {
+    margin-top: 50px;
+    margin-left: 240px;
+    margin-right: 10px;
+    padding: 10px;
+    text-align: left;
+    border: thin solid ;
+}
+
+#msgBody {
+    background-color: yellow;
+}
+
+a:link {
+
+}
+
+a:visited {
+    color: blue;
+}
+
+a:hover {
+    color:  aqua;
+    background: fuchsia;
+}
+
+#footer {
+    font-size: smaller;
+    text-align: center;
+    border: solid 1px;
+    border-color: black;
+    color: gray;
+    margin: 20px 10px 0px 10px;
+    padding: 10px;
+    clear: left;
+}
