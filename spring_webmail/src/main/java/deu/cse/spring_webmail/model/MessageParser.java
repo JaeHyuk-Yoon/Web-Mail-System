@@ -58,15 +58,14 @@ public class MessageParser {
                 getPart(message);
             }
             // 220611 LJM: 필요시 true로 하여 메시지 본문 볼 수 있도록 할 것.
-            // printMessage(false);  
+            //
             //  예외가 발생하지 않았으므로 정상적으로 동작하였음.
             status = true;
         } catch (Exception ex) {
             log.error("MessageParser.parse() - Exception : {}", ex.getMessage());
             status = false;
-        } finally {
-            return status;
         }
+        return status;
     }
 
     private void getEnvelope(Message m) throws Exception {
@@ -89,9 +88,9 @@ public class MessageParser {
 
         if (disp != null && (disp.equalsIgnoreCase(Part.ATTACHMENT)
                 || disp.equalsIgnoreCase(Part.INLINE))) {  // 첨부 파일
-//            fileName = p.getFileName();
+//          
             fileName = MimeUtility.decodeText(p.getFileName());
-//            fileName = fileName.replaceAll(" ", "%20");
+//          
             if (fileName != null) {
                 // 첨부 파일을 서버의 내려받기 임시 저장소에 저장
                 String tempUserDir = this.downloadTempDir + File.separator + this.userid;
@@ -103,7 +102,7 @@ public class MessageParser {
                 String filename = MimeUtility.decodeText(p.getFileName());
                 // 파일명에 " "가 있을 경우 서블릿에 파라미터로 전달시 문제 발생함.
                 // " "를 모두 "_"로 대체함.
-//                filename = filename.replaceAll("%20", " ");
+//              
                 DataHandler dh = p.getDataHandler();
                 FileOutputStream fos = new FileOutputStream(tempUserDir + File.separator + filename);
                 dh.writeTo(fos);
@@ -114,7 +113,7 @@ public class MessageParser {
             if (p.isMimeType("text/*")) {
                 body = (String) p.getContent();
                 if (p.isMimeType("text/plain")) {
-                    body = body.replaceAll("\r\n", " <br>");
+                    body = body.replace("\r\n", " <br>");
                 }
             } else if (p.isMimeType("multipart/alternative")) {
                 // html text보다  plain text 선호

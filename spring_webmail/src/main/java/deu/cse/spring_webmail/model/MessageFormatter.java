@@ -60,13 +60,13 @@ public class MessageFormatter {
         buffer.append("</table>");
 
         return buffer.toString();
-//        return "MessageFormatter 테이블 결과";
+//      
     }
 
     public String getMessage(Message message) {
         StringBuilder buffer = new StringBuilder();
 
-        // MessageParser parser = new MessageParser(message, userid);
+        //
         MessageParser parser = new MessageParser(message, userid, request);
         parser.parse(true);
         
@@ -86,7 +86,7 @@ public class MessageFormatter {
         if (attachedFile != null) {
             buffer.append("<br> <hr> 첨부파일: <a href=download"
                     + "?userid=" + this.userid
-                    + "&filename=" + attachedFile.replaceAll(" ", "%20")
+                    + "&filename=" + attachedFile.replace(" ", "%20")
                     + " target=_top> " + attachedFile + "</a> <br>");
         }
 

@@ -31,7 +31,7 @@ public class SpringWebmailApplication {
         bean.setLocation(new ClassPathResource("/system.properties"));
         try {
             Properties props = bean.getObject();
-            // log.debug("props = {}", props.keySet());
+            //
         } catch (IOException ex) {
             log.error("configProperties: 예외 = {}", ex.getMessage());
         }
