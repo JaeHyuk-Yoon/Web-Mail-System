@@ -124,6 +124,11 @@ public class SmtpAgent {
                     log.error(this.file1 + ": 파일 삭제가 제대로 안 됨.");
                 }
             }
+            
+            // sent 테이블에 이메일 정보 저장
+            SentMailModel sentmail = new SentMailModel();
+            sentmail.saveSentMessage(msg);
+            
             status = true;
         } catch (Exception ex) {
             log.error("sendMessage() error: {}", ex);
