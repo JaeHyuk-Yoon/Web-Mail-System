@@ -128,13 +128,13 @@ public class SystemController {
     }
 
     @GetMapping("/main_menu")
-    public String mainmenu(Model model) {
+    public String mainmenu(Model model, @RequestParam(defaultValue = "1") Integer currentpage) {
         Pop3Agent pop3 = new Pop3Agent();
         pop3.setHost((String) session.getAttribute("host"));
         pop3.setUserid((String) session.getAttribute("userid"));
         pop3.setPassword((String) session.getAttribute("password"));
 
-        String messageList = pop3.getMessageList();
+        String messageList = pop3.getMessageList(currentpage);
         model.addAttribute("messageList", messageList);
         return "main_menu";
     }

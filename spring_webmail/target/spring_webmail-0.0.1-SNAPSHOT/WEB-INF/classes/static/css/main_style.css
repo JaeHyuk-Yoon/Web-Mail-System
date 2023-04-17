@@ -33,6 +33,10 @@ th {
     color: white;
 }
 
+table#pagination {
+    position: relative;
+    left: 32%;
+}
 
 td#sender {
     width: 20%;

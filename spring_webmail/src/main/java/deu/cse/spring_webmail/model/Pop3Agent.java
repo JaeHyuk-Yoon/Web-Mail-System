@@ -87,7 +87,7 @@ public class Pop3Agent {
     /*
      * 페이지 단위로 메일 목록을 보여주어야 함.
      */
-    public String getMessageList() {
+    public String getMessageList(int currentpage) {
         String result = "";
         Message[] messages = null;
 
@@ -109,8 +109,18 @@ public class Pop3Agent {
             folder.fetch(messages, fp);
 
             MessageFormatter formatter = new MessageFormatter(userid);  //3.5
-            result = formatter.getMessageTable(messages);   // 3.6
-
+            Pagination paging = new Pagination();
+            paging.setTotalmail(messages.length);
+            paging.setCurrentpage(currentpage);
+            int startmail = (currentpage -1) * paging.getPostmail() + 1;
+            int endmail = currentpage * paging.getPostmail();
+            if(messages.length < paging.getPostmail()){
+                result = formatter.getMessageTable(messages, startmail, messages.length); 
+            } else{
+                result = formatter.getMessageTable(messages, startmail, endmail);   // 3.6
+            }
+            result = result + paging.pagination();
+            
             folder.close(true);  // 3.7
             store.close();       // 3.8
         } catch (Exception ex) {

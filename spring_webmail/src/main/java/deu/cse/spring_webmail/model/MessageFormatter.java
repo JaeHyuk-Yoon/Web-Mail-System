@@ -25,9 +25,8 @@ public class MessageFormatter {
     @Getter private String sender;
     @Getter private String subject;
     @Getter private String body;
-
-
-    public String getMessageTable(Message[] messages) {
+    
+    public String getMessageTable(Message[] messages, int startmail, int endmail) {
         StringBuilder buffer = new StringBuilder();
 
         // 메시지 제목 보여주기
@@ -40,7 +39,7 @@ public class MessageFormatter {
                 + " <th> 삭제 </td>   "
                 + " </tr>");
 
-        for (int i = messages.length - 1; i >= 0; i--) {
+        for (int i = endmail-1; i >= startmail-1; i--) {
             MessageParser parser = new MessageParser(messages[i], userid);
             parser.parse(false);  // envelope 정보만 필요
             // 메시지 헤더 포맷
