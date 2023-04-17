@@ -39,7 +39,7 @@ public class MessageFormatter {
                 + " <th> 삭제 </td>   "
                 + " </tr>");
 
-        for (int i = endmail-1; i >= startmail-1; i--) {
+        for (int i = endmail - 1; i >= startmail; i--) {
             MessageParser parser = new MessageParser(messages[i], userid);
             parser.parse(false);  // envelope 정보만 필요
             // 메시지 헤더 포맷

@@ -112,7 +112,7 @@ public class Pop3Agent {
             Pagination paging = new Pagination();
             paging.setTotalmail(messages.length);
             paging.setCurrentpage(currentpage);
-            int startmail = (currentpage -1) * paging.getPostmail() + 1;
+            int startmail = (currentpage - 1) * paging.getPostmail();
             int endmail = currentpage * paging.getPostmail();
             if(messages.length < paging.getPostmail()){
                 result = formatter.getMessageTable(messages, startmail, messages.length); 
