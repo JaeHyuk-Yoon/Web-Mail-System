@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class Pagination {
     @Getter @Setter private int totalmail; //전체 메일 갯수
     @Getter @Setter private int currentpage; //보고있는 페이지
-    @Getter @Setter private int postmail = 1; //페이지 당 표시할 메일 갯수
+    @Getter @Setter private int postmail = 10; //페이지 당 표시할 메일 갯수
     @Getter @Setter private int postpage = 5; //표시할 페이지 갯수
     
     private int totalpage(int totalmail, int postmail){
@@ -59,13 +59,15 @@ public class Pagination {
         
         buffer.append("<ul id=pagination> ");
         if(pre){
-            buffer.append("<li id=pre><a href=main_menu?currentpage=1 title=\"첫 페이지\"> << </a></li> ");
+            buffer.append("<li id=pre><a href=main_menu?currentpage=1 title=\"첫 페이지\"> |< </a></li> ");
+            buffer.append("<li id=pre><a href=main_menu?currentpage=" + (currentpage - 1) + " title=\"이전 페이지\"> << </a></li> ");
         }
         for (int page = startpage; page <= endpage; page++){
             buffer.append("<li id=page><a href=main_menu?currentpage=" + page + " title=\"페이지 변경\"> " + page + "</a> </li>");
         }
         if(next){
-            buffer.append("<li id=last><a href=main_menu?currentpage=" + totalpage + " title=\"마지막 페이지\"> >> </a></li> ");
+            buffer.append("<li id=pre><a href=main_menu?currentpage=" + (currentpage + 1) + " title=\"다음 페이지\"> >> </a></li> ");
+            buffer.append("<li id=last><a href=main_menu?currentpage=" + totalpage + " title=\"마지막 페이지\"> >| </a></li> ");
         }
         buffer.append("</ul>");
         
