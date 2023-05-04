@@ -71,7 +71,7 @@ td#subject {
 #sidebar {
     margin: 20px 10px 10px 10px;
     padding: 10px;
-    width: 150px;
+    width: 200px;
     float: left;
 }
 
@@ -119,14 +119,14 @@ a:hover {
     clear: left;
 }
 
-ul {
+ul #page {
     list-style: none;
     display: flex;
     justify-content: center;
     width: calc(100% - 300px)
 }
 
-li {
+li #page {
     margin: 0px 5px;
     padding: 5px;
 }

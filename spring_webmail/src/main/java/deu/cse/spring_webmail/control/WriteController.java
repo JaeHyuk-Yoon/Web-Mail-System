@@ -122,7 +122,7 @@ public class WriteController {
         return status;
     }  // sendMessage()
     
-    @GetMapping("/write_mail")
+    @GetMapping("/write_tome")
     public String writeToMe() {
         log.debug("write_mail called...");
         session.removeAttribute("sender");  // 220612 LJM - 메일 쓰기 시는 

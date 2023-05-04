@@ -57,17 +57,17 @@ public class Pagination {
         
         StringBuilder buffer = new StringBuilder();
         
-        buffer.append("<ul id=pagination> ");
+        buffer.append("<ul id=page> ");
         if(pre){
-            buffer.append("<li id=pre><a href=main_menu?currentpage=1 title=\"첫 페이지\"> |< </a></li> ");
-            buffer.append("<li id=pre><a href=main_menu?currentpage=" + (currentpage - 1) + " title=\"이전 페이지\"> << </a></li> ");
+            buffer.append("<li id=page><a href=main_menu?currentpage=1 title=\"첫 페이지\"> |< </a></li> ");
+            buffer.append("<li id=page><a href=main_menu?currentpage=" + (currentpage - 1) + " title=\"이전 페이지\"> << </a></li> ");
         }
         for (int page = startpage; page <= endpage; page++){
             buffer.append("<li id=page><a href=main_menu?currentpage=" + page + " title=\"페이지 변경\"> " + page + "</a> </li>");
         }
         if(next){
-            buffer.append("<li id=pre><a href=main_menu?currentpage=" + (currentpage + 1) + " title=\"다음 페이지\"> >> </a></li> ");
-            buffer.append("<li id=last><a href=main_menu?currentpage=" + totalpage + " title=\"마지막 페이지\"> >| </a></li> ");
+            buffer.append("<li id=page><a href=main_menu?currentpage=" + (currentpage + 1) + " title=\"다음 페이지\"> >> </a></li> ");
+            buffer.append("<li id=page><a href=main_menu?currentpage=" + totalpage + " title=\"마지막 페이지\"> >| </a></li> ");
         }
         buffer.append("</ul>");
         
