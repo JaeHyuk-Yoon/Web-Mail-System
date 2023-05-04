@@ -37,6 +37,7 @@ public class MessageFormatter {
                 + " <th> 보낸 사람 </td>"
                 + " <th> 제목 </td>     "
                 + " <th> 보낸 날짜 </td>   "
+                + " <th> 읽음 </td>   "
                 + " <th> 삭제 </td>   "
                 + " </tr>");
 
@@ -52,6 +53,7 @@ public class MessageFormatter {
                     + " <a href=show_message?msgid=" + (i + 1) + " title=\"메일 보기\"> "
                     + parser.getSubject() + "</a> </td>"
                     + " <td id=date>" + parser.getSentDate() + "</td>"
+                    + " <td id=check>"+ parser.getShowCheck() + "</td>"
                     + " <td id=delete>"
                     + "<a href=delete_mail.do"
                     + "?msgid=" + (i + 1) + "> 삭제 </a>" + "</td>"

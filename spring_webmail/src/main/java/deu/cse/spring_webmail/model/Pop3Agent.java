@@ -4,18 +4,22 @@
  */
 package deu.cse.spring_webmail.model;
 
+import deu.cse.spring_webmail.entity.Inbox;
+import deu.cse.spring_webmail.repository.InboxRepository;
 import jakarta.mail.FetchProfile;
 import jakarta.mail.Flags;
 import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
+import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -35,6 +39,8 @@ public class Pop3Agent {
     @Getter private String sender;
     @Getter private String subject;
     @Getter private String body;
+    
+    @Autowired InboxRepository inboxRepository;
     
     public Pop3Agent(String host, String userid, String password) {
         this.host = host;
@@ -91,30 +97,46 @@ public class Pop3Agent {
      */
     public String getMessageList() {
         String result = "";
-        Message[] messages = null;
-
-        if (!connectToStore()) {  // 3.1
-            log.error("POP3 connection failed!");
-            return "POP3 연결이 되지 않아 메일 목록을 볼 수 없습니다.";
-        }
 
         try {
-            // 메일 폴더 열기
-            Folder folder = store.getFolder("INBOX");  // 3.2
-            folder.open(Folder.READ_ONLY);  // 3.3
+            //JPA Repository 이용해서 나에게 온 메세지 모두 가져오기            
+            List<Inbox> mineMail = inboxRepository.findByReciveMail(userid);
+            
+            StringBuilder buffer = new StringBuilder();
 
-            // 현재 수신한 메시지 모두 가져오기
-            messages = folder.getMessages();      // 3.4
-            FetchProfile fp = new FetchProfile();
-            // From, To, Cc, Bcc, ReplyTo, Subject & Date
-            fp.add(FetchProfile.Item.ENVELOPE);
-            folder.fetch(messages, fp);
+            // 메시지 제목 보여주기
+            buffer.append("<table>");  // table start
+            buffer.append("<tr> "
+                    + " <th> No. </td> "
+                    + " <th> 보낸 사람 </td>"
+                    + " <th> 제목 </td>     "
+                    + " <th> 보낸 날짜 </td>   "
+                    + " <th> 읽음 </td>   "
+                    + " <th> 삭제 </td>   "
+                    + " </tr>");
 
-            MessageFormatter formatter = new MessageFormatter(userid);  //3.5
-            result = formatter.getMessageTable(messages);   // 3.6
+            int i = 0;
+            
+            for (Inbox inbox : mineMail) {
+                // 메시지 헤더 포맷
+                // 추출한 정보를 출력 포맷 사용하여 스트링으로 만들기
+                buffer.append("<tr> "
+                        + " <td id=no>" + (i + 1) + " </td> "
+                        + " <td id=sender>" + mineMail.getSender() + "</td>"
+                        + " <td id=subject> "
+                        + " <a href=show_message?msgid=" + (i + 1) + " title=\"메일 보기\"> "
+                        + mineMail.getSubject() + "</a> </td>"
+                        + " <td id=date>" + parser.getSentDate() + "</td>"
+                        + " <td id=check>"+ parser.getShowCheck() + "</td>"
+                        + " <td id=delete>"
+                        + "<a href=delete_mail.do"
+                        + "?msgid=" + (i + 1) + "> 삭제 </a>" + "</td>"
+                        + " </tr>");
+            }
+            buffer.append("</table>");
 
-            folder.close(true);  // 3.7
-            store.close();       // 3.8
+            return buffer.toString();
+
         } catch (Exception ex) {
             log.error("Pop3Agent.getMessageList() : exception = {}", ex.getMessage());
             result = "Pop3Agent.getMessageList() : exception = " + ex.getMessage();
