@@ -25,3 +25,4 @@ hs_err_pid*
 #Netbeans
 *.netbeans_automatic_build
 *.lst
+*.lst
