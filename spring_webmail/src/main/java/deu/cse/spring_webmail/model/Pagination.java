@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class Pagination {
     @Getter @Setter private int totalmail; //전체 메일 갯수
     @Getter @Setter private int currentpage; //보고있는 페이지
-    @Getter @Setter private int postmail = 10; //페이지 당 표시할 메일 갯수
+    @Getter @Setter private int postmail = 1; //페이지 당 표시할 메일 갯수
     @Getter @Setter private int postpage = 5; //표시할 페이지 갯수
     
     private int totalpage(int totalmail, int postmail){
