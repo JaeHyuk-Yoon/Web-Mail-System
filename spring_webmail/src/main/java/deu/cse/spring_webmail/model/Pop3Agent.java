@@ -4,22 +4,30 @@
  */
 package deu.cse.spring_webmail.model;
 
+
 import deu.cse.spring_webmail.entity.Inbox;
+import deu.cse.spring_webmail.entity.InboxPK;
 import deu.cse.spring_webmail.repository.InboxRepository;
+import deu.cse.spring_webmail.repository.TestRepository;
+import deu.cse.spring_webmail.repository.UsersRepository;
 import jakarta.mail.FetchProfile;
 import jakarta.mail.Flags;
 import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
+import java.sql.Blob;
 import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -27,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @NoArgsConstructor        // 기본 생성자 생성
+@AllArgsConstructor
+@Service
 public class Pop3Agent {
     @Getter @Setter private String host;
     @Getter @Setter private String userid;
@@ -40,7 +50,14 @@ public class Pop3Agent {
     @Getter private String subject;
     @Getter private String body;
     
-    @Autowired InboxRepository inboxRepository;
+    @Autowired
+    InboxRepository inboxRepository;
+    
+    @Autowired
+    UsersRepository usersRepository;
+    
+    @Autowired
+    TestRepository testRepository;
     
     public Pop3Agent(String host, String userid, String password) {
         this.host = host;
@@ -97,10 +114,29 @@ public class Pop3Agent {
      */
     public String getMessageList() {
         String result = "";
-
+        String makedRecipients = String.format("%s@localhost", userid);
+        
+        log.error("recipients = {}", makedRecipients);
+        
+        long t = 1;
+        log.error("test = {}",testRepository.findAll().toString());
+        
+        log.error("userRepository = {}",usersRepository.findAll().toString());
+        //log.error("inboxRepository = {}",inboxRepository.findAll().toString());
+        List<Inbox> testinboxList = inboxRepository.findByRepositoryName(userid);
+        for(Inbox testInbox : testinboxList) {
+            Blob body = testInbox.getMessageBody();
+            log.error("inboxRepository = {}",testInbox.toString());
+            log.error("body = {}",body.toString());
+            
+        }
+        
+        //List<Inbox> testmail = inboxRepository.findByRecipients(makedRecipients);
+        
+        
         try {
             //JPA Repository 이용해서 나에게 온 메세지 모두 가져오기            
-            List<Inbox> mineMail = inboxRepository.findByReciveMail(userid);
+            List<Inbox> mineMail = inboxRepository.findByRepositoryName(userid);
             
             StringBuilder buffer = new StringBuilder();
 
@@ -118,24 +154,26 @@ public class Pop3Agent {
             int i = 0;
             
             for (Inbox inbox : mineMail) {
+                //MessageParser parser = new MessageParser(inbox.getMessageBody(), userid);
+                log.error("Sender = {}", inbox.getSender());
                 // 메시지 헤더 포맷
                 // 추출한 정보를 출력 포맷 사용하여 스트링으로 만들기
                 buffer.append("<tr> "
                         + " <td id=no>" + (i + 1) + " </td> "
-                        + " <td id=sender>" + mineMail.getSender() + "</td>"
+                        + " <td id=sender>" + inbox.getSender() + "</td>"
                         + " <td id=subject> "
                         + " <a href=show_message?msgid=" + (i + 1) + " title=\"메일 보기\"> "
-                        + mineMail.getSubject() + "</a> </td>"
-                        + " <td id=date>" + parser.getSentDate() + "</td>"
-                        + " <td id=check>"+ parser.getShowCheck() + "</td>"
+                        + inbox.getMessageBody() + "</a> </td>"
+                        + " <td id=date>" + inbox.getLastUpdated() + "</td>"
+                        + " <td id=check>"+ inbox.getShowCheck() + "</td>"
                         + " <td id=delete>"
                         + "<a href=delete_mail.do"
                         + "?msgid=" + (i + 1) + "> 삭제 </a>" + "</td>"
                         + " </tr>");
             }
             buffer.append("</table>");
-
-            return buffer.toString();
+            result = buffer.toString();
+            //return buffer.toString();
 
         } catch (Exception ex) {
             log.error("Pop3Agent.getMessageList() : exception = {}", ex.getMessage());

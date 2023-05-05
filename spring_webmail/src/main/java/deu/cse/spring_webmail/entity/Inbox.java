@@ -5,15 +5,22 @@
 package deu.cse.spring_webmail.entity;
 
 
+
+import java.io.Serializable;
+import java.sql.Blob;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -21,42 +28,50 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "INBOX")
-public class Inbox {
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "inbox")
+@IdClass(InboxPK.class)
+public class Inbox implements Serializable {
     
-    @EmbeddedId
-    private InboxPK inboxpk;
+    @Id
+    @Column(name = "message_name")
+    private String messageName;
     
-    @Column(name = "MESSAGE_STATE")
-    private String message_state;
+    @Id
+    @Column(name = "repository_name")
+    private String repositoryName;
     
-    @Column(name = "ERROR_MESSAGE")
-    private String error_message;
+    @Column(name = "message_state")
+    private String messageState;
     
-    @Column(name = "SENDER")
+    @Column(name = "error_message")
+    private String errorMessage;
+    
+    @Column(name = "sender")
     private String sender;
     
-    @Column(name = "RECIPENTS")
+    @Column(name = "recipents")
     private String recipients;
     
-    @Column(name = "REMOTE_HOST")
-    private String remote_host;
+    @Column(name = "remote_host")
+    private String remoteHost;
     
-    @Column(name = "REMOTE_ADDR")
-    private String remote_addr;
+    @Column(name = "remote_addr")
+    private String remoteAddr;
     
-    @Column(name = "MESSAGE_BODY")
+    @Column(name = "message_body")
     @Lob
-    private String message_body;
+    private Blob messageBody;
     
-    @Column(name = "MESSAGE_ATTRIBUTES")
+    @Column(name = "message_attributes")
     @Lob
-    private String message_attributes;
+    private String messageAttributes;
     
-    @Column(name = "LAST_UPDATED")
+    @Column(name = "last_updated")
     @Temporal(TemporalType.DATE)
-    private Date last_updated;
+    private Date lastUpdated;
     
-    @Column(name = "SHOW_CHECK")
-    private int show_check;
+    @Column(name = "show_check")
+    private int showCheck;
 }

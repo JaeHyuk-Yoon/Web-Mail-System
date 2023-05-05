@@ -7,7 +7,9 @@ package deu.cse.spring_webmail.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -15,12 +17,13 @@ import lombok.Data;
  */
 
 @Data
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class InboxPK implements Serializable {
-    @Column(name = "MESSAGE_NAME")
-    private String message_name;
+    @Column(name = "message_name")
+    private String messageName;
     
-    @Column(name = "REPOSITORY_NAME")
-    private String repository_name;
+    @Column(name = "repository_name")
+    private String repositoryName;
 }

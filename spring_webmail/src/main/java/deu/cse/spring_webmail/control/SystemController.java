@@ -57,6 +57,9 @@ public class SystemController {
     private Integer JAMES_CONTROL_PORT;
     @Value("${james.host}")
     private String JAMES_HOST;
+    
+    @Autowired
+    private Pop3Agent pop3;
 
     @GetMapping("/")
     public String index() {
@@ -129,7 +132,7 @@ public class SystemController {
 
     @GetMapping("/main_menu")
     public String mainmenu(Model model) {
-        Pop3Agent pop3 = new Pop3Agent();
+        //Pop3Agent pop3 = new Pop3Agent();
         pop3.setHost((String) session.getAttribute("host"));
         pop3.setUserid((String) session.getAttribute("userid"));
         pop3.setPassword((String) session.getAttribute("password"));
