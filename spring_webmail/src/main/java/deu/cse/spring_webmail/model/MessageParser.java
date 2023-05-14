@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageParser {
     @NonNull @Getter @Setter private Message message;
     @NonNull @Getter @Setter private String userid;
+    @Getter @Setter private int messageNumber;
     @Getter @Setter private String toAddress;
     @Getter @Setter private String fromAddress;
     @Getter @Setter private String ccAddress;
@@ -69,6 +70,7 @@ public class MessageParser {
     }
 
     private void getEnvelope(Message m) throws Exception {
+        messageNumber = message.getMessageNumber();
         fromAddress = message.getFrom()[0].toString();  // 101122 LJM : replaces getMyFrom2()
         toAddress = getAddresses(message.getRecipients(Message.RecipientType.TO));
         Address[] addr = message.getRecipients(Message.RecipientType.CC);

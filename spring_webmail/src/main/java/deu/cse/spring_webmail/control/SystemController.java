@@ -138,6 +138,18 @@ public class SystemController {
         model.addAttribute("messageList", messageList);
         return "main_menu";
     }
+    
+    @GetMapping("/main_menu_fromme")
+    public String mainmenuFromme(Model model, @RequestParam(defaultValue = "1") Integer currentpage) {
+        Pop3Agent pop3 = new Pop3Agent();
+        pop3.setHost((String) session.getAttribute("host"));
+        pop3.setUserid((String) session.getAttribute("userid"));
+        pop3.setPassword((String) session.getAttribute("password"));
+
+        String messageList = pop3.getMessageFromMeList(currentpage);
+        model.addAttribute("messageList", messageList);
+        return "main_menu_fromme";
+    }
 
     @GetMapping("/admin_menu")
     public String adminMenu(Model model) {

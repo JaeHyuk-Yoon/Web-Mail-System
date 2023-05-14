@@ -10,6 +10,7 @@ import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
+import java.util.ArrayList;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import lombok.Getter;
@@ -119,7 +120,7 @@ public class Pop3Agent {
             } else{
                 result = formatter.getMessageTable(messages, startmail, endmail);   // 3.6
             }
-            result = result + paging.pagination();
+            result = result + paging.paginationAll();
             
             folder.close(true);  // 3.7
             store.close();       // 3.8
@@ -130,6 +131,61 @@ public class Pop3Agent {
         return result;
     }
 
+    public String getMessageFromMeList(int currentpage) {
+        String result = "";
+        Message[] messages = null;
+
+        if (!connectToStore()) {  // 3.1
+            log.error("POP3 connection failed!");
+            return "POP3 연결이 되지 않아 메일 목록을 볼 수 없습니다.";
+        }
+
+        try {
+            // 메일 폴더 열기
+            Folder folder = store.getFolder("INBOX");  // 3.2
+            folder.open(Folder.READ_ONLY);  // 3.3
+
+            // 현재 수신한 메시지 모두 가져오기
+            messages = folder.getMessages();      // 3.4
+            FetchProfile fp = new FetchProfile();
+            // From, To, Cc, Bcc, ReplyTo, Subject & Date
+            fp.add(FetchProfile.Item.ENVELOPE);
+            folder.fetch(messages, fp);
+
+            MessageFormatter formatter = new MessageFormatter(userid);  //3.5
+            
+            ArrayList<Message> m = new ArrayList<Message>();
+            for(int i = 0; i < messages.length; i++){
+                if(messages[i].getFrom()[0].toString().equals(userid)){
+                    m.add(messages[i]);
+                }
+            }
+            
+            Message[] messagelist = new Message[m.size()];
+            m.toArray(messagelist);
+            m.toArray();
+            
+            Pagination paging = new Pagination();
+            paging.setTotalmail(messagelist.length);
+            paging.setCurrentpage(currentpage);
+            int startmail = (currentpage - 1) * paging.getPostmail();
+            int endmail = currentpage * paging.getPostmail();
+            if(messagelist.length < paging.getPostmail()){
+                result = formatter.getMessageTable(messagelist, startmail, m.size()); 
+            } else{
+                result = formatter.getMessageTable(messagelist, startmail, endmail);   // 3.6
+            }
+            result = result + paging.paginationFromme();
+            
+            folder.close(true);  // 3.7
+            store.close();       // 3.8
+        } catch (Exception ex) {
+            log.error("Pop3Agent.getMessageList() : exception = {}", ex.getMessage());
+            result = "Pop3Agent.getMessageList() : exception = " + ex.getMessage();
+        }
+        return result;
+    }
+    
     public String getMessage(int n) {
         String result = "POP3  서버 연결이 되지 않아 메시지를 볼 수 없습니다.";
 
