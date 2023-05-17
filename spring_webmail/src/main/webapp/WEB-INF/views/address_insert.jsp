@@ -1,0 +1,66 @@
+<%-- 
+    Document   : address_insert
+    Created on : 2023. 5. 17., 오후 8:10:02
+    Author     : User
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+
+<!-- 제어기에서 처리하면 로직 관련 소스 코드 제거 가능!
+<jsp:useBean id="pop3" scope="page" class="deu.cse.spring_webmail.model.Pop3Agent" />
+<%
+            pop3.setHost((String) session.getAttribute("host"));
+            pop3.setUserid((String) session.getAttribute("userid"));
+            pop3.setPassword((String) session.getAttribute("password"));
+%>
+-->
+
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>주소록 추가 폼</title>
+        <link rel="stylesheet" type="text/css"
+              href="${pageContext.request.contextPath}/css/my_style.css">
+    </head>
+    <body>
+        <%@include file="header.jspf"%>
+
+        <div id="sidebar">
+            <jsp:include page="sidebar_menu.jsp" />
+        </div>
+        <div id="main">
+            <h1>주소록 추가</h1>
+            <hr />
+
+            <form action="${pageContext.request.contextPath}/insert.do" method="POST">
+                <table border="0">
+                    <tbody>
+                        <tr>
+                            <td>이름</td>
+                            <td><input type="text" name="name" size="20" /></td>
+                        </tr>
+                        <tr>
+                            <td>이메일</td>
+                            <td><input type="text" name="email" value="" size="20" /></td>
+                        </tr>
+                        <tr>
+                            <td>전화번호</td>
+                            <td><input type="text" name="phone" value="" size="20" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <center>
+                                    <input type="submit" value="추가" /> <input type="reset" value="초기화"/>
+                                </center>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <%@include file="footer.jspf"%>
+    </body>
+</html>
