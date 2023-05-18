@@ -53,7 +53,7 @@ public class MessageFormatter {
                     + " <td id=date>" + parser.getSentDate() + "</td>"
                     + " <td id=delete>"
                     + "<a href=delete_mail.do"
-                    + "?msgid=" + parser.getMessageNumber() + "> 삭제 </a>" + "</td>"
+                    + "?msgid=" + parser.getMessageNumber() + "  onclick=\"return confirm('삭제하시겠습니까?');\"> 삭제 </a>" + "</td>"
                     + " </tr>");
         }
         buffer.append("</table>");

@@ -8,11 +8,9 @@
 <!DOCTYPE html>
 
 <!-- 제어기에서 처리하면 로직 관련 소스 코드 제거 가능!
-<jsp:useBean id="pop3" scope="page" class="deu.cse.spring_webmail.model.Pop3Agent" />
+<jsp:useBean id="address" scope="page" class="deu.cse.spring_webmail.model.AddressManager" />
 <%
-            pop3.setHost((String) session.getAttribute("host"));
-            pop3.setUserid((String) session.getAttribute("userid"));
-            pop3.setPassword((String) session.getAttribute("password"));
+            address.setUserid((String) session.getAttribute("userid"));
 %>
 -->
 
@@ -22,20 +20,19 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>주소록 추가 폼</title>
-        <link rel="stylesheet" type="text/css"
-              href="${pageContext.request.contextPath}/css/my_style.css">
+        <link type="text/css" rel="stylesheet" href="css/main_style.css" />
     </head>
     <body>
-        <%@include file="header.jspf"%>
+        <%@include file="../header.jspf"%>
 
         <div id="sidebar">
-            <jsp:include page="sidebar_menu.jsp" />
+            <jsp:include page="../sidebar_menu.jsp" />
         </div>
         <div id="main">
             <h1>주소록 추가</h1>
             <hr />
 
-            <form action="${pageContext.request.contextPath}/insert.do" method="POST">
+            <form action="insert.do" method="POST">
                 <table border="0">
                     <tbody>
                         <tr>
@@ -61,6 +58,6 @@
                 </table>
             </form>
         </div>
-        <%@include file="footer.jspf"%>
+        <%@include file="../footer.jspf"%>
     </body>
 </html>

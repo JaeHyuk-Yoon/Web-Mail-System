@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,6 +27,8 @@ public class AddressManager {
     private String userName;
     private String password;
     private String jdbcDriver;
+    
+    @Setter @Getter private String userid;
 
     public AddressManager() {
         log.debug("AddrBookManager(): mysqlServerIp={}, jdbcDriver={}", mysqlServerIp, jdbcDriver);
@@ -46,15 +50,16 @@ public class AddressManager {
         log.debug("JDBC_URL={}, mysqlServerIp={}, jdbcDriver={}", JDBC_URL, mysqlServerIp, jdbcDriver);
 
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(JDBC_URL, userName, password);
-            stmt = conn.createStatement();
-            String sql = "SELECT email, name, phone FROM addrbook";
-            rs = stmt.executeQuery(sql);
+            String sql = "SELECT email, name, phone FROM addrbook WHERE userid = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, userid);
+            rs = pstmt.executeQuery(sql);
 
             while (rs.next()) {
                 String email = rs.getString("email");
@@ -65,8 +70,8 @@ public class AddressManager {
             if (rs != null) {
                 rs.close();
             }
-            if (stmt != null) {
-                stmt.close();
+            if (pstmt != null) {
+                pstmt.close();
             }
             if (conn != null) {
                 conn.close();
@@ -83,17 +88,18 @@ public class AddressManager {
         log.debug("JDBC_URL ={}", JDBC_URL);
 
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(JDBC_URL, this.userName, this.password);
-            String sql = "INSERT into addrbook VALUES(?,?,?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            String sql = "INSERT into addrbook VALUES(?,?,?,?)";
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, email);
             pstmt.setString(2, name);
             pstmt.setString(3, phone);
+            pstmt.setString(4, userid);
 
             pstmt.executeUpdate();
             if (pstmt != null) {
@@ -112,17 +118,17 @@ public class AddressManager {
         log.debug("JDBC_URL ={}", JDBC_URL);
 
         Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
+        PreparedStatement pstmt = null;
 
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(JDBC_URL, this.userName, this.password);
-            String sql = "Delete from addrbook WHERE email = ? and name = ? and phone = ?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            String sql = "Delete from addrbook WHERE email = ? and name = ? and phone = ? and userid = ?)";
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, email);
             pstmt.setString(2, name);
             pstmt.setString(3, phone);
+            pstmt.setString(4, userid);
 
             pstmt.executeUpdate();
             if (pstmt != null) {

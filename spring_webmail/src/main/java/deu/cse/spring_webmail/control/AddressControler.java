@@ -7,6 +7,9 @@ package deu.cse.spring_webmail.control;
 import deu.cse.spring_webmail.model.AddressManager;
 import deu.cse.spring_webmail.model.Address;
 import java.util.List;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +28,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
-@PropertySource("classpath:/config.properties")
+@PropertySource("classpath:/system.properties")
 public class AddressControler {
+    @Autowired
+    private ServletContext ctx;
+    @Autowired
+    private HttpSession session;
+    @Autowired
+    private HttpServletRequest request;
+    
     @Value("${mysql.server.ip}")
     private String mysqlServerIp;
     @Value("${mysql.server.port}")
@@ -43,15 +53,16 @@ public class AddressControler {
         log.debug("ip={}, port={}", this.mysqlServerIp, this.mysqlServerPort);
 
         AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+        manager.setUserid((String) session.getAttribute("userid"));
         List<Address> dataRows = manager.getAllRows();
         model.addAttribute("dataRows", dataRows);
 
-        return "/address_view";
+        return "address/address_view";
     }
 
     @GetMapping("/address_insert")
     public String insertAddressBook() {
-        return "/adress_insert";
+        return "address/address_insert";
     }
 
     @PostMapping("/insert.do")
@@ -61,6 +72,7 @@ public class AddressControler {
         String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
 
         AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+        manager.setUserid((String) session.getAttribute("userid"));
         manager.addRow(email, name, phone);
 
         List<Address> dataRows = manager.getAllRows();
@@ -76,6 +88,7 @@ public class AddressControler {
         String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
 
         AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+        manager.setUserid((String) session.getAttribute("userid"));
         manager.removeRow(email, name, phone);
 
         List<Address> dataRows = manager.getAllRows();

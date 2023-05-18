@@ -120,6 +120,7 @@ public class ReadController {
         String password = (String) session.getAttribute("password");
 
         Pop3Agent pop3 = new Pop3Agent(host, userid, password);
+        
         boolean deleteSuccessful = pop3.deleteMessage(msgId, true);
         if (deleteSuccessful) {
             attrs.addFlashAttribute("msg", "메시지 삭제를 성공하였습니다.");
