@@ -39,13 +39,22 @@ td#sender {
 }
 
 td#date {
-    width: 22%;
+    width: 20%;
 }
 
 
 td#subject {
     text-align: left;
     width: 50%;
+}
+
+
+td#restore {
+        width: 5%;
+}
+
+td#permanentlyDelete {
+        width: 5%;
 }
 
 

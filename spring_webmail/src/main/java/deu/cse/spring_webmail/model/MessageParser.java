@@ -37,6 +37,7 @@ public class MessageParser {
     @Getter @Setter private String body;
     @Getter @Setter private String fileName;
     @Getter @Setter private String downloadTempDir = "C:/temp/download/";
+    @Getter @Setter private String showCheck;
     
     public MessageParser(Message message, String userid, HttpServletRequest request) {
         this(message, userid);
@@ -48,7 +49,7 @@ public class MessageParser {
             f.mkdir();
         }
     }
-
+    
     public boolean parse(boolean parseBody) {
         boolean status = false;
 
@@ -81,6 +82,7 @@ public class MessageParser {
         subject = message.getSubject();
         sentDate = message.getSentDate().toString();
         sentDate = sentDate.substring(0, sentDate.length() - 8);  // 8 for "KST 20XX"
+        
     }
 
     // ref: http://www.oracle.com/technetwork/java/faq-135477.html#readattach

@@ -4,18 +4,30 @@
  */
 package deu.cse.spring_webmail.model;
 
+
+import deu.cse.spring_webmail.entity.Inbox;
+import deu.cse.spring_webmail.entity.InboxPK;
+import deu.cse.spring_webmail.repository.InboxRepository;
+import deu.cse.spring_webmail.repository.TestRepository;
+import deu.cse.spring_webmail.repository.UsersRepository;
 import jakarta.mail.FetchProfile;
 import jakarta.mail.Flags;
 import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
+import java.sql.Blob;
+import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -23,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @NoArgsConstructor        // 기본 생성자 생성
+@AllArgsConstructor
+@Service
 public class Pop3Agent {
     @Getter @Setter private String host;
     @Getter @Setter private String userid;
@@ -35,6 +49,18 @@ public class Pop3Agent {
     @Getter private String sender;
     @Getter private String subject;
     @Getter private String body;
+    
+    @Autowired
+    InboxRepository inboxRepository;
+    
+    @Autowired
+    UsersRepository usersRepository;
+    
+    @Autowired
+    TestRepository testRepository;
+    
+    @Autowired
+    private TrashModel trashModel;
     
     public Pop3Agent(String host, String userid, String password) {
         this.host = host;
@@ -71,7 +97,13 @@ public class Pop3Agent {
 
             // Message에 DELETED flag 설정
             Message msg = folder.getMessage(msgid);
-            msg.setFlag(Flags.Flag.DELETED, really_delete);
+            
+            // 휴지통 기능 - trashbox로 메일 이동
+            boolean moveSuccess = trashModel.moveToTrashbox(msgid);
+
+            if (moveSuccess) {
+                msg.setFlag(Flags.Flag.DELETED, really_delete);
+            }
 
             // 폴더에서 메시지 삭제
             // Message [] expungedMessage = folder.expunge();
@@ -91,30 +123,68 @@ public class Pop3Agent {
      */
     public String getMessageList() {
         String result = "";
-        Message[] messages = null;
-
-        if (!connectToStore()) {  // 3.1
-            log.error("POP3 connection failed!");
-            return "POP3 연결이 되지 않아 메일 목록을 볼 수 없습니다.";
+        String makedRecipients = String.format("%s@localhost", userid);
+        
+        log.error("recipients = {}", makedRecipients);
+        
+        long t = 1;
+        log.error("test = {}",testRepository.findAll().toString());
+        
+        log.error("userRepository = {}",usersRepository.findAll().toString());
+        //log.error("inboxRepository = {}",inboxRepository.findAll().toString());
+        List<Inbox> testinboxList = inboxRepository.findByRepositoryName(userid);
+        for(Inbox testInbox : testinboxList) {
+            Blob body = testInbox.getMessageBody();
+            log.error("inboxRepository = {}",testInbox.toString());
+            log.error("body = {}",body.toString());
+            
         }
-
+        
+        //List<Inbox> testmail = inboxRepository.findByRecipients(makedRecipients);
+        
+        
         try {
-            // 메일 폴더 열기
-            Folder folder = store.getFolder("INBOX");  // 3.2
-            folder.open(Folder.READ_ONLY);  // 3.3
+            //JPA Repository 이용해서 나에게 온 메세지 모두 가져오기            
+            List<Inbox> mineMail = inboxRepository.findByRepositoryName(userid);
+            
+            StringBuilder buffer = new StringBuilder();
 
-            // 현재 수신한 메시지 모두 가져오기
-            messages = folder.getMessages();      // 3.4
-            FetchProfile fp = new FetchProfile();
-            // From, To, Cc, Bcc, ReplyTo, Subject & Date
-            fp.add(FetchProfile.Item.ENVELOPE);
-            folder.fetch(messages, fp);
+            // 메시지 제목 보여주기
+            buffer.append("<table>");  // table start
+            buffer.append("<tr> "
+                    + " <th> No. </td> "
+                    + " <th> 보낸 사람 </td>"
+                    + " <th> 제목 </td>     "
+                    + " <th> 보낸 날짜 </td>   "
+                    + " <th> 읽음 </td>   "
+                    + " <th> 삭제 </td>   "
+                    + " </tr>");
 
-            MessageFormatter formatter = new MessageFormatter(userid);  //3.5
-            result = formatter.getMessageTable(messages);   // 3.6
+            int i = 0;
+            
+            for (Inbox inbox : mineMail) {
+                //MessageParser parser = new MessageParser(inbox.getMessageBody(), userid);
+                log.error("Sender = {}", inbox.getSender());
+                // 메시지 헤더 포맷
+                // 추출한 정보를 출력 포맷 사용하여 스트링으로 만들기
+                buffer.append("<tr> "
+                        + " <td id=no>" + (i + 1) + " </td> "
+                        + " <td id=sender>" + inbox.getSender() + "</td>"
+                        + " <td id=subject> "
+                        + " <a href=show_message?msgid=" + (i + 1) + " title=\"메일 보기\"> "
+                        + inbox.getMessageBody() + "</a> </td>"
+                        + " <td id=date>" + inbox.getLastUpdated() + "</td>"
+                        + " <td id=check>"+ inbox.getShowCheck() + "</td>"
+                        + " <td id=delete>"
+                        + "<a href=delete_mail.do"
+                        + "?msgid=" + (i + 1) + "> 삭제 </a>" + "</td>"
+                        + " </tr>");
+                i++;
+            }
+            buffer.append("</table>");
+            result = buffer.toString();
+            //return buffer.toString();
 
-            folder.close(true);  // 3.7
-            store.close();       // 3.8
         } catch (Exception ex) {
             log.error("Pop3Agent.getMessageList() : exception = {}", ex.getMessage());
             result = "Pop3Agent.getMessageList() : exception = " + ex.getMessage();
