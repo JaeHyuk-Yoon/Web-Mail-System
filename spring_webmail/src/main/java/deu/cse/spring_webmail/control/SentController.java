@@ -80,5 +80,5 @@ public class SentController {
        
         return "/sent_mail/show_sentmessage";
     }
-
+   
 }
