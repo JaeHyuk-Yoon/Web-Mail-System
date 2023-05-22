@@ -82,7 +82,6 @@ public class AddressManager {
         return dataList;
     }
 
-
     public void addRow(String email, String name, String phone) {
         final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul",mysqlServerIp, mysqlServerPort);
         log.debug("JDBC_URL ={}", JDBC_URL);
@@ -100,6 +99,39 @@ public class AddressManager {
             pstmt.setString(2, name);
             pstmt.setString(3, phone);
             pstmt.setString(4, userid);
+
+            pstmt.executeUpdate();
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception ex) {
+            log.error("오류가 발생했씁니다. (발생 오류: {})", ex.getMessage());
+        }
+    }
+    
+    public void changeRow(String preemail, String prename, String prephone, String nexemail, String nexname, String nexphone) {
+        final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul",mysqlServerIp, mysqlServerPort);
+        log.debug("JDBC_URL ={}", JDBC_URL);
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            Class.forName(jdbcDriver);
+            conn = DriverManager.getConnection(JDBC_URL, this.userName, this.password);
+            String sql = "UPDATE addrbook SET (email, name, phone) = (?,?,?) WHERE email = ? and name = ? and phone = ? and userid = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, nexemail);
+            pstmt.setString(2, nexname);
+            pstmt.setString(3, nexphone);
+            pstmt.setString(4, preemail);
+            pstmt.setString(5, prename);
+            pstmt.setString(6, prephone);
+            pstmt.setString(7, userid);
 
             pstmt.executeUpdate();
             if (pstmt != null) {

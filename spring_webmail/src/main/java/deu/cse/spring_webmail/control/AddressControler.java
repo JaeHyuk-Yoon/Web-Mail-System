@@ -64,6 +64,11 @@ public class AddressControler {
     public String insertAddressBook() {
         return "address/address_insert";
     }
+    
+    @GetMapping("/address_update")
+    public String updateAddressBook() {
+        return "address/address_update";
+    }
 
     @PostMapping("/insert.do")
     public String insertAddressBook(@RequestParam String email, @RequestParam String name, @RequestParam String phone, Model model) {
@@ -74,6 +79,23 @@ public class AddressControler {
         AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.addRow(email, name, phone);
+
+        List<Address> dataRows = manager.getAllRows();
+        model.addAttribute("dataRows", dataRows);
+
+        return "redirect:/address_view";
+    }
+    
+    @PostMapping("/update.do")
+    public String updateAddressBook(@RequestParam String preemail, @RequestParam String prename, @RequestParam String prephone, 
+                                     @RequestParam String nexemail, @RequestParam String nexname, @RequestParam String nexphone, Model model) {
+        String userName = env.getProperty("spring.datasource.username");
+        String password = env.getProperty("spring.datasource.password");
+        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
+
+        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+        manager.setUserid((String) session.getAttribute("userid"));
+        manager.changeRow(preemail, prename, prephone, nexemail, nexname, nexphone);
 
         List<Address> dataRows = manager.getAllRows();
         model.addAttribute("dataRows", dataRows);
