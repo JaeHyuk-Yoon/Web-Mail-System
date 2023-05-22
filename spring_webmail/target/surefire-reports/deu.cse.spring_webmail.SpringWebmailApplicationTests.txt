@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: deu.cse.spring_webmail.SpringWebmailApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.915 s - in deu.cse.spring_webmail.SpringWebmailApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.94 s - in deu.cse.spring_webmail.SpringWebmailApplicationTests

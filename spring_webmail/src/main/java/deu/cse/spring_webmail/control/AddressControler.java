@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author User
  */
-
 @Controller
 @Slf4j
 @PropertySource("classpath:/system.properties")
 public class AddressControler {
+
     @Autowired
     private ServletContext ctx;
     @Autowired
     private HttpSession session;
     @Autowired
     private HttpServletRequest request;
-    
+
     @Value("${mysql.server.ip}")
     private String mysqlServerIp;
     @Value("${mysql.server.port}")
@@ -44,7 +44,7 @@ public class AddressControler {
 
     @Autowired
     private Environment env;
-    
+
     @GetMapping("/address_view")
     public String insertTable(Model model) {
         String userName = env.getProperty("spring.datasource.username");
@@ -64,7 +64,7 @@ public class AddressControler {
     public String insertAddressBook() {
         return "address/address_insert";
     }
-    
+
     @GetMapping("/address_update")
     public String updateAddressBook() {
         return "address/address_update";
@@ -85,10 +85,10 @@ public class AddressControler {
 
         return "redirect:/address_view";
     }
-    
+
     @PostMapping("/update.do")
-    public String updateAddressBook(@RequestParam String preemail, @RequestParam String prename, @RequestParam String prephone, 
-                                     @RequestParam String nexemail, @RequestParam String nexname, @RequestParam String nexphone, Model model) {
+    public String updateAddressBook(@RequestParam String preemail, @RequestParam String prename, @RequestParam String prephone,
+            @RequestParam String nexemail, @RequestParam String nexname, @RequestParam String nexphone, Model model) {
         String userName = env.getProperty("spring.datasource.username");
         String password = env.getProperty("spring.datasource.password");
         String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
@@ -102,7 +102,7 @@ public class AddressControler {
 
         return "redirect:/address_view";
     }
-    
+
     @PostMapping("/delete.do")
     public String deleteAddressBook(@RequestParam String email, @RequestParam String name, @RequestParam String phone, Model model) {
         String userName = env.getProperty("spring.datasource.username");

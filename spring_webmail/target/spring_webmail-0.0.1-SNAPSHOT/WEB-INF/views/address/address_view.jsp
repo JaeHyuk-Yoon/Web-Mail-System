@@ -51,9 +51,9 @@
                 <tbody>
                     <c:forEach var="row" items="${dataRows}">
                         <tr>
-                            <td>${row.name}</td>
-                            <td>${row.email}</td>
-                            <td>${row.phone}</td>
+                            <td id = "name">${row.name}</td>
+                            <td id = "email">${row.email}</td>
+                            <td id = "phone">${row.phone}</td>
                             <td><a href="delete.do" onclick="return confirm('삭제하시겠습니까?');">삭제</a></td>
                         </tr>
                     </c:forEach>
@@ -62,7 +62,8 @@
 
             <br><br><!-- comment -->
 
-            <a href="address_insert">주소록 추가</a>
+            <a href="address_insert">주소록 등록</a>
+            <a href="address_update">주소록 수정</a>
         </div>
         <%@include file="../footer.jspf"%>
     </body>

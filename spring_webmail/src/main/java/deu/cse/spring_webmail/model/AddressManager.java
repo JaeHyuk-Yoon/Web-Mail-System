@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -19,16 +18,18 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author User
  */
-
 @Slf4j
 public class AddressManager {
+
     private String mysqlServerIp;
     private String mysqlServerPort;
     private String userName;
     private String password;
     private String jdbcDriver;
-    
-    @Setter @Getter private String userid;
+
+    @Setter
+    @Getter
+    private String userid;
 
     public AddressManager() {
         log.debug("AddrBookManager(): mysqlServerIp={}, jdbcDriver={}", mysqlServerIp, jdbcDriver);
@@ -83,12 +84,11 @@ public class AddressManager {
     }
 
     public void addRow(String email, String name, String phone) {
-        final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul",mysqlServerIp, mysqlServerPort);
+        final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul", mysqlServerIp, mysqlServerPort);
         log.debug("JDBC_URL ={}", JDBC_URL);
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
 
         try {
             Class.forName(jdbcDriver);
@@ -101,6 +101,7 @@ public class AddressManager {
             pstmt.setString(4, userid);
 
             pstmt.executeUpdate();
+            
             if (pstmt != null) {
                 pstmt.close();
             }
@@ -111,14 +112,13 @@ public class AddressManager {
             log.error("오류가 발생했씁니다. (발생 오류: {})", ex.getMessage());
         }
     }
-    
+
     public void changeRow(String preemail, String prename, String prephone, String nexemail, String nexname, String nexphone) {
-        final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul",mysqlServerIp, mysqlServerPort);
+        final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul", mysqlServerIp, mysqlServerPort);
         log.debug("JDBC_URL ={}", JDBC_URL);
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
 
         try {
             Class.forName(jdbcDriver);
@@ -134,6 +134,7 @@ public class AddressManager {
             pstmt.setString(7, userid);
 
             pstmt.executeUpdate();
+            
             if (pstmt != null) {
                 pstmt.close();
             }
@@ -144,9 +145,9 @@ public class AddressManager {
             log.error("오류가 발생했씁니다. (발생 오류: {})", ex.getMessage());
         }
     }
-    
+
     public void removeRow(String email, String name, String phone) {
-        final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul",mysqlServerIp, mysqlServerPort);
+        final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul", mysqlServerIp, mysqlServerPort);
         log.debug("JDBC_URL ={}", JDBC_URL);
 
         Connection conn = null;
@@ -163,6 +164,7 @@ public class AddressManager {
             pstmt.setString(4, userid);
 
             pstmt.executeUpdate();
+            
             if (pstmt != null) {
                 pstmt.close();
             }

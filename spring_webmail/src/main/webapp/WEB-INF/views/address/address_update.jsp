@@ -50,10 +50,6 @@
                             <td>전화번호</td>
                             <td><input type="text" name="prephone" value="" size="20" /></td>
                         </tr>
-                    </tbody>
-                </table>
-                <table border="0">
-                    <tbody>
                         <tr>
                             <td>변경후</td>
                         </tr>
