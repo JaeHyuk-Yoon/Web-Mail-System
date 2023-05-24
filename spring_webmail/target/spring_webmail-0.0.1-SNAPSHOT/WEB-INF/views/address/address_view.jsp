@@ -54,7 +54,7 @@
                             <td id = "name">${row.name}</td>
                             <td id = "email">${row.email}</td>
                             <td id = "phone">${row.phone}</td>
-                            <td><a href="delete.do" onclick="return confirm('삭제하시겠습니까?');">삭제</a></td>
+                            <td><a href="delete.do?name=${row.name}&email=${row.email}&phone=${row.phone}" onclick="return confirm('삭제하시겠습니까?');">삭제</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>

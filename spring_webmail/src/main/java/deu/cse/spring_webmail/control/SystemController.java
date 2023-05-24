@@ -98,7 +98,7 @@ public class SystemController {
                     }
                 } else {
                     //
-                    // view.forward(request, response);
+                    //
                     url = "redirect:/login_fail";
                 }
                 break;

@@ -29,7 +29,7 @@
             <jsp:include page="../sidebar_menu.jsp" />
         </div>
         <div id="main">
-            <h1>주소록 추가</h1>
+            <h1>주소록 수정</h1>
             <hr />
 
             <form action="update.do" method="POST">
@@ -68,7 +68,7 @@
                         <tr>
                             <td colspan="2">
                                 <center>
-                                    <input type="submit" value="추가" /> <input type="reset" value="초기화"/>
+                                    <input type="submit" value="수정" /> <input type="reset" value="초기화"/>
                                 </center>
                             </td>
                         </tr>

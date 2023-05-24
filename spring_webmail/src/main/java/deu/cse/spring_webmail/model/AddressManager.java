@@ -60,7 +60,8 @@ public class AddressManager {
             String sql = "SELECT email, name, phone FROM addrbook WHERE userid = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, userid);
-            rs = pstmt.executeQuery(sql);
+            log.debug(pstmt.toString());
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 String email = rs.getString("email");
@@ -99,7 +100,7 @@ public class AddressManager {
             pstmt.setString(2, name);
             pstmt.setString(3, phone);
             pstmt.setString(4, userid);
-
+            log.debug(pstmt.toString());
             pstmt.executeUpdate();
             
             if (pstmt != null) {
@@ -123,7 +124,7 @@ public class AddressManager {
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(JDBC_URL, this.userName, this.password);
-            String sql = "UPDATE addrbook SET (email, name, phone) = (?,?,?) WHERE email = ? and name = ? and phone = ? and userid = ?";
+            String sql = "UPDATE addrbook SET email = ?, name = ?, phone = ? WHERE email=? and name=? and phone=? and userid=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nexemail);
             pstmt.setString(2, nexname);
@@ -132,7 +133,7 @@ public class AddressManager {
             pstmt.setString(5, prename);
             pstmt.setString(6, prephone);
             pstmt.setString(7, userid);
-
+            log.debug(pstmt.toString());
             pstmt.executeUpdate();
             
             if (pstmt != null) {
@@ -149,20 +150,20 @@ public class AddressManager {
     public void removeRow(String email, String name, String phone) {
         final String JDBC_URL = String.format("jdbc:mysql://%s:%s/webmail?serverTimezone=Asia/Seoul", mysqlServerIp, mysqlServerPort);
         log.debug("JDBC_URL ={}", JDBC_URL);
-
+        log.debug("email ={}, name={}, phone={}", email, name, phone);
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(JDBC_URL, this.userName, this.password);
-            String sql = "Delete from addrbook WHERE email = ? and name = ? and phone = ? and userid = ?)";
+            String sql = "Delete from addrbook WHERE email = ? and name = ? and phone = ? and userid = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, email);
             pstmt.setString(2, name);
             pstmt.setString(3, phone);
             pstmt.setString(4, userid);
-
+            log.debug(pstmt.toString());
             pstmt.executeUpdate();
             
             if (pstmt != null) {

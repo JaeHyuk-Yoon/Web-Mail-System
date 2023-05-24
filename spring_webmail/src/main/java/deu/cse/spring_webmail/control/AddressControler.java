@@ -103,12 +103,12 @@ public class AddressControler {
         return "redirect:/address_view";
     }
 
-    @PostMapping("/delete.do")
-    public String deleteAddressBook(@RequestParam String email, @RequestParam String name, @RequestParam String phone, Model model) {
+    @GetMapping("/delete.do")
+    public String deleteAddressBook(@RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("phone") String phone, Model model) {
         String userName = env.getProperty("spring.datasource.username");
         String password = env.getProperty("spring.datasource.password");
         String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-
+        log.debug(email);
         AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.removeRow(email, name, phone);
