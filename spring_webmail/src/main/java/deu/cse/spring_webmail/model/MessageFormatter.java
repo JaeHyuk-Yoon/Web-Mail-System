@@ -4,32 +4,51 @@
  */
 package deu.cse.spring_webmail.model;
 
+import deu.cse.spring_webmail.entity.Inbox;
+import deu.cse.spring_webmail.repository.InboxRepository;
 import jakarta.mail.Message;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- *
+ * 
  * @author skylo
  */
 @Slf4j
-@RequiredArgsConstructor
+@NoArgsConstructor        // 기본 생성자 생성
+@AllArgsConstructor
+//@RequiredArgsConstructor
+@Service
 public class MessageFormatter {
-    @NonNull private String userid;  // 파일 임시 저장 디렉토리 생성에 필요
+//    @NonNull private String userid;  // 파일 임시 저장 디렉토리 생성에 필요
+    @Getter @Setter private String userid;  // 파일 임시 저장 디렉토리 생성에 필요
     private HttpServletRequest request = null;
     
     // 220612 LJM - added to implement REPLY
     @Getter private String sender;
     @Getter private String subject;
     @Getter private String body;
-
+    List<Inbox> inboxList;
+    
+    @Autowired
+    InboxRepository inboxRepository;
 
     public String getMessageTable(Message[] messages) {
         StringBuilder buffer = new StringBuilder();
-
+        
+        List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
+        
+        log.error("atfer getDbMessages");
+        
         // 메시지 제목 보여주기
         buffer.append("<table>");  // table start
         buffer.append("<tr> "
@@ -44,6 +63,9 @@ public class MessageFormatter {
         for (int i = messages.length - 1; i >= 0; i--) {
             MessageParser parser = new MessageParser(messages[i], userid);
             parser.parse(false);  // envelope 정보만 필요
+            
+            parser.createShowCheck(inboxList);   //mine
+            
             // 메시지 헤더 포맷
             // 추출한 정보를 출력 포맷 사용하여 스트링으로 만들기
             buffer.append("<tr> "
@@ -68,6 +90,8 @@ public class MessageFormatter {
     public String getMessage(Message message) {
         StringBuilder buffer = new StringBuilder();
 
+        List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
+        
         // MessageParser parser = new MessageParser(message, userid);
         MessageParser parser = new MessageParser(message, userid, request);
         parser.parse(true);
@@ -75,7 +99,12 @@ public class MessageFormatter {
         sender = parser.getFromAddress();
         subject = parser.getSubject();
         body = parser.getBody();
-
+        
+        log.error("before update show check method");
+        Inbox updatedInbox = parser.updateShowCheck(inboxList);
+        
+        if(updatedInbox != null) inboxRepository.save(updatedInbox);
+        
         buffer.append("보낸 사람: " + parser.getFromAddress() + " <br>");
         buffer.append("받은 사람: " + parser.getToAddress() + " <br>");
         buffer.append("Cc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + parser.getCcAddress() + " <br>");
@@ -94,6 +123,10 @@ public class MessageFormatter {
 
         return buffer.toString();
     }
+    
+//    public Inbox updateShowCheck(List<Inbox> inboxes) {
+//        return parser.updateShowCheck(inboxList);   //mine
+//    }
     
     public void setRequest(HttpServletRequest request) {
         this.request = request;

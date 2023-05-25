@@ -17,9 +17,12 @@ import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,20 +48,23 @@ public class Pop3Agent {
     @Getter @Setter private Store store;
     @Getter @Setter private String excveptionType;
     @Getter @Setter private HttpServletRequest request;
+    //private HttpSession session = request.getSession();
     
     // 220612 LJM - added to implement REPLY
     @Getter private String sender;
     @Getter private String subject;
     @Getter private String body;
     
-    @Autowired
-    InboxRepository inboxRepository;
+//    @Autowired
+//    InboxRepository inboxRepository;
+    
+//    @Autowired
+//    UsersRepository usersRepository;
     
     @Autowired
-    UsersRepository usersRepository;
+    MessageFormatter formatter;
     
-    @Autowired
-    TestRepository testRepository;
+    
     
     public Pop3Agent(String host, String userid, String password) {
         this.host = host;
@@ -114,67 +121,36 @@ public class Pop3Agent {
      */
     public String getMessageList() {
         String result = "";
-        String makedRecipients = String.format("%s@localhost", userid);
+        Message[] messages = null;
+//        List<Message> messageList = new ArrayList<Message>();
         
-        log.error("recipients = {}", makedRecipients);
-        
-        long t = 1;
-        log.error("test = {}",testRepository.findAll().toString());
-        
-        log.error("userRepository = {}",usersRepository.findAll().toString());
-        //log.error("inboxRepository = {}",inboxRepository.findAll().toString());
-        List<Inbox> testinboxList = inboxRepository.findByRepositoryName(userid);
-        for(Inbox testInbox : testinboxList) {
-            Blob body = testInbox.getMessageBody();
-            log.error("inboxRepository = {}",testInbox.toString());
-            log.error("body = {}",body.toString());
-            
+        if (!connectToStore()) {  // 3.1
+            log.error("POP3 connection failed!");
+            return "POP3 연결이 되지 않아 메일 목록을 볼 수 없습니다.";
         }
-        
-        //List<Inbox> testmail = inboxRepository.findByRecipients(makedRecipients);
-        
-        
+
         try {
-            //JPA Repository 이용해서 나에게 온 메세지 모두 가져오기            
-            List<Inbox> mineMail = inboxRepository.findByRepositoryName(userid);
+            // 메일 폴더 열기
+            Folder folder = store.getFolder("INBOX");  // 3.2
+            folder.open(Folder.READ_ONLY);  // 3.3
             
-            StringBuilder buffer = new StringBuilder();
+//            List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
 
-            // 메시지 제목 보여주기
-            buffer.append("<table>");  // table start
-            buffer.append("<tr> "
-                    + " <th> No. </td> "
-                    + " <th> 보낸 사람 </td>"
-                    + " <th> 제목 </td>     "
-                    + " <th> 보낸 날짜 </td>   "
-                    + " <th> 읽음 </td>   "
-                    + " <th> 삭제 </td>   "
-                    + " </tr>");
+            // 현재 수신한 메시지 모두 가져오기
+            messages = folder.getMessages();      // 3.4
 
-            int i = 0;
-            
-            for (Inbox inbox : mineMail) {
-                //MessageParser parser = new MessageParser(inbox.getMessageBody(), userid);
-                log.error("Sender = {}", inbox.getSender());
-                // 메시지 헤더 포맷
-                // 추출한 정보를 출력 포맷 사용하여 스트링으로 만들기
-                buffer.append("<tr> "
-                        + " <td id=no>" + (i + 1) + " </td> "
-                        + " <td id=sender>" + inbox.getSender() + "</td>"
-                        + " <td id=subject> "
-                        + " <a href=show_message?msgid=" + (i + 1) + " title=\"메일 보기\"> "
-                        + inbox.getMessageBody() + "</a> </td>"
-                        + " <td id=date>" + inbox.getLastUpdated() + "</td>"
-                        + " <td id=check>"+ inbox.getShowCheck() + "</td>"
-                        + " <td id=delete>"
-                        + "<a href=delete_mail.do"
-                        + "?msgid=" + (i + 1) + "> 삭제 </a>" + "</td>"
-                        + " </tr>");
-            }
-            buffer.append("</table>");
-            result = buffer.toString();
-            //return buffer.toString();
+            FetchProfile fp = new FetchProfile();
+            // From, To, Cc, Bcc, ReplyTo, Subject & Date
+            fp.add(FetchProfile.Item.ENVELOPE);
+            folder.fetch(messages, fp);
+//            MessageFormatter formatter = new MessageFormatter(userid);  //3.5
+            formatter.setUserid(userid);
+           //log.error("messages = {}",messages.toString());
+            log.error("before getMessageTable");
+            result = formatter.getMessageTable(messages);   // 3.6
 
+            folder.close(true);  // 3.7
+            store.close();       // 3.8
         } catch (Exception ex) {
             log.error("Pop3Agent.getMessageList() : exception = {}", ex.getMessage());
             result = "Pop3Agent.getMessageList() : exception = " + ex.getMessage();
@@ -194,26 +170,31 @@ public class Pop3Agent {
         try {
             Folder folder = store.getFolder("INBOX");
             folder.open(Folder.READ_ONLY);
-
+            
+//            List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
+            
             Message message = folder.getMessage(n);
 
-            MessageFormatter formatter = new MessageFormatter(userid);
+//            MessageFormatter formatter = new MessageFormatter(userid);
+            formatter.setUserid(userid);
             formatter.setRequest(request);  // 210308 LJM - added
             result = formatter.getMessage(message);
             sender = formatter.getSender();  // 220612 LJM - added
             subject = formatter.getSubject();
             body = formatter.getBody();
+            
+//            Inbox updatedInbox = formatter.updateShowCheck(inboxList);
 
             folder.close(true);
             store.close();
         } catch (Exception ex) {
-            log.error("Pop3Agent.getMessageList() : exception = {}", ex);
+            log.error("Pop3Agent.getMessage() : exception = {}", ex);
             result = "Pop3Agent.getMessage() : exception = " + ex;
         } finally {
             return result;
         }
     }
-
+    
     private boolean connectToStore() {
         boolean status = false;
         Properties props = System.getProperties();

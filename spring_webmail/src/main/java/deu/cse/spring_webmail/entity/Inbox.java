@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  *
@@ -51,7 +52,7 @@ public class Inbox implements Serializable {
     @Column(name = "sender")
     private String sender;
     
-    @Column(name = "recipents")
+    @Column(name = "recipients")
     private String recipients;
     
     @Column(name = "remote_host")
@@ -73,5 +74,6 @@ public class Inbox implements Serializable {
     private Date lastUpdated;
     
     @Column(name = "show_check")
+    @ColumnDefault("0")
     private int showCheck;
 }
