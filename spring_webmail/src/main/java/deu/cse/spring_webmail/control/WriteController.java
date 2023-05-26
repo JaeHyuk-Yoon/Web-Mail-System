@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,9 +43,13 @@ public class WriteController {
     private HttpSession session;
     
     @GetMapping("/write_mail")
-    public String writeMail() {
+    public String writeMail(@RequestParam(value="recv", required = false)String recv, Model model) {
         log.debug("write_mail called...");
-        session.removeAttribute("sender");  // 220612 LJM - 메일 쓰기 시는 
+        if(recv.isEmpty()){
+            session.removeAttribute("recv");  // 220612 LJM - 메일 쓰기 시는 }
+        } else {
+            model.addAttribute("recv", recv);
+        }
         return "write_mail/write_mail";
     }
     

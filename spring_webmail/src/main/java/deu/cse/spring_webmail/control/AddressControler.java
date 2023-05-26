@@ -19,6 +19,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -71,7 +72,12 @@ public class AddressControler {
     }
 
     @GetMapping("/address_update")
-    public String updateAddressBook() {
+    public String updateAddressBook(@RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("phone") String phone, Model model) {
+        model.addAttribute("prename", name);
+        model.addAttribute("preemail", email);
+        model.addAttribute("nexemail",email);
+        model.addAttribute("prephone", phone);
+        
         return "address/address_update";
     }
 
@@ -92,8 +98,8 @@ public class AddressControler {
     }
 
     @PostMapping("/update.do")
-    public String updateAddressBook(@RequestParam String preemail, @RequestParam String prename, @RequestParam String prephone,
-            @RequestParam String nexemail, @RequestParam String nexname, @RequestParam String nexphone, Model model) {
+    public String updateAddressBook(@ModelAttribute("preemail") String preemail, @ModelAttribute("prename") String prename, @ModelAttribute("prephone") String prephone,
+                                    @RequestParam String nexemail, @ModelAttribute("nexemail") String nexname, @RequestParam String nexphone, Model model) {
 //        String userName = env.getProperty("spring.datasource.username");
 //        String password = env.getProperty("spring.datasource.password");
 //        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");

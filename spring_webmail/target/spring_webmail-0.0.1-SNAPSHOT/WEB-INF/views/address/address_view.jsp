@@ -46,14 +46,16 @@
                         <th>이메일</th>
                         <th>전화번호</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="row" items="${dataRows}">
                         <tr>
                             <td id = "name">${row.name}</td>
-                            <td id = "email">${row.email}</td>
+                            <td id = "email"><a href="write_mail?sender=${row.email}">${row.email}</a></td>
                             <td id = "phone">${row.phone}</td>
+                            <td><a href="address_update?name=${row.name}&email=${row.email}&phone=${row.phone}"">수정</a></td>
                             <td><a href="delete.do?name=${row.name}&email=${row.email}&phone=${row.phone}" onclick="return confirm('삭제하시겠습니까?');">삭제</a></td>
                         </tr>
                     </c:forEach>
@@ -63,7 +65,6 @@
             <br><br><!-- comment -->
 
             <a href="address_insert">주소록 등록</a>
-            <a href="address_update">주소록 수정</a>
         </div>
         <%@include file="../footer.jspf"%>
     </body>
