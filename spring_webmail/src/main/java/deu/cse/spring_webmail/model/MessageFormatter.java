@@ -42,11 +42,8 @@ public class MessageFormatter {
     @Autowired
     InboxRepository inboxRepository;
 
-//    public String getMessageTable(Message[] messages) {
-//=======
-//    
+
     public String getMessageTable(Message[] messages, int startmail, int endmail) {
-//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
         StringBuilder buffer = new StringBuilder();
         
         List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
@@ -87,19 +84,12 @@ public class MessageFormatter {
         buffer.append("</table>");
 
         return buffer.toString();
-//      
     }
 
     public String getMessage(Message message) {
         StringBuilder buffer = new StringBuilder();
-
-//<<<<<<< HEAD
         List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
-        
-        // MessageParser parser = new MessageParser(message, userid);
-//=======
-//        //
-//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
+
         MessageParser parser = new MessageParser(message, userid, request);
         parser.parse(true);
         
@@ -130,10 +120,6 @@ public class MessageFormatter {
 
         return buffer.toString();
     }
-    
-//    public Inbox updateShowCheck(List<Inbox> inboxes) {
-//        return parser.updateShowCheck(inboxList);   //mine
-//    }
     
     public void setRequest(HttpServletRequest request) {
         this.request = request;
@@ -170,8 +156,7 @@ public class MessageFormatter {
 
         return buffer.toString();
     }
-
-   
+    
     // 휴지통 테이블 생성
    public String getTrashMessageTable(Message[] messages) {
         StringBuilder buffer = new StringBuilder();

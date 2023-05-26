@@ -56,26 +56,8 @@ public class Pop3Agent {
     @Getter private String subject;
     @Getter private String body;
     
-
-//    @Autowired
-//    InboxRepository inboxRepository;
-    
-//    @Autowired
-//    UsersRepository usersRepository;
-    
     @Autowired
     MessageFormatter formatter;
-    
-    
-
-//    @Autowired
-//    InboxRepository inboxRepository;
-//    
-//    @Autowired
-//    UsersRepository usersRepository;
-//    
-//    @Autowired
-//    TestRepository testRepository;
     
     @Autowired
     private TrashModel trashModel;
@@ -109,7 +91,6 @@ public class Pop3Agent {
 
         try {
             // Folder 설정
-//          
             Folder folder = store.getFolder("INBOX");
             folder.open(Folder.READ_WRITE);
 
@@ -141,7 +122,6 @@ public class Pop3Agent {
     public String getMessageList(int currentpage) {
         String result = "";
         Message[] messages = null;
-//        List<Message> messageList = new ArrayList<Message>();
         
         if (!connectToStore()) {  // 3.1
             log.error("POP3 connection failed!");
@@ -152,8 +132,6 @@ public class Pop3Agent {
             // 메일 폴더 열기
             Folder folder = store.getFolder("INBOX");  // 3.2
             folder.open(Folder.READ_ONLY);  // 3.3
-            
-//            List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
 
             // 현재 수신한 메시지 모두 가져오기
             messages = folder.getMessages();      // 3.4
@@ -162,14 +140,11 @@ public class Pop3Agent {
             // From, To, Cc, Bcc, ReplyTo, Subject & Date
             fp.add(FetchProfile.Item.ENVELOPE);
             folder.fetch(messages, fp);
-//<<<<<<< HEAD
+
 //            MessageFormatter formatter = new MessageFormatter(userid);  //3.5
             formatter.setUserid(userid);
 //            result = formatter.getMessageTable(messages);   // 3.6
 
-//=======
-
-//            MessageFormatter formatter = new MessageFormatter(userid);  //3.5
             Pagination paging = new Pagination();
             paging.setTotalmail(messages.length);
             paging.setCurrentpage(currentpage);
@@ -182,7 +157,6 @@ public class Pop3Agent {
             }
             result = result + paging.paginationAll();
             
-//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
             folder.close(true);  // 3.7
             store.close();       // 3.8
         } catch (Exception ex) {
@@ -269,8 +243,6 @@ public class Pop3Agent {
             Folder folder = store.getFolder("INBOX");
             folder.open(Folder.READ_ONLY);
             
-//            List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
-            
             Message message = folder.getMessage(n);
 
 //            MessageFormatter formatter = new MessageFormatter(userid);
@@ -280,8 +252,6 @@ public class Pop3Agent {
             sender = formatter.getSender();  // 220612 LJM - added
             subject = formatter.getSubject();
             body = formatter.getBody();
-            
-//            Inbox updatedInbox = formatter.updateShowCheck(inboxList);
 
             folder.close(true);
             store.close();

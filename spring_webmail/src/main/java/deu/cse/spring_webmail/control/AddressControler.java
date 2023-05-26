@@ -4,6 +4,7 @@
  */
 package deu.cse.spring_webmail.control;
 
+import deu.cse.spring_webmail.entity.AddrBook;
 import deu.cse.spring_webmail.model.AddressManager;
 import deu.cse.spring_webmail.model.Address;
 import java.util.List;
@@ -45,16 +46,20 @@ public class AddressControler {
     @Autowired
     private Environment env;
 
+    @Autowired
+    AddressManager manager;
+    
     @GetMapping("/address_view")
     public String insertTable(Model model) {
-        String userName = env.getProperty("spring.datasource.username");
-        String password = env.getProperty("spring.datasource.password");
-        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-        log.debug("ip={}, port={}", this.mysqlServerIp, this.mysqlServerPort);
+//        String userName = env.getProperty("spring.datasource.username");
+//        String password = env.getProperty("spring.datasource.password");
+//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
+//        log.debug("ip={}, port={}", this.mysqlServerIp, this.mysqlServerPort);
 
-        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+//        AddressManager manager = new AddressManager();
         manager.setUserid((String) session.getAttribute("userid"));
-        List<Address> dataRows = manager.getAllRows();
+        List<AddrBook> dataRows = manager.getAllRows();
         model.addAttribute("dataRows", dataRows);
 
         return "address/address_view";
@@ -72,15 +77,15 @@ public class AddressControler {
 
     @PostMapping("/insert.do")
     public String insertAddressBook(@RequestParam String email, @RequestParam String name, @RequestParam String phone, Model model) {
-        String userName = env.getProperty("spring.datasource.username");
-        String password = env.getProperty("spring.datasource.password");
-        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-
-        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+//        String userName = env.getProperty("spring.datasource.username");
+//        String password = env.getProperty("spring.datasource.password");
+//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
+//
+//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.addRow(email, name, phone);
 
-        List<Address> dataRows = manager.getAllRows();
+        List<AddrBook> dataRows = manager.getAllRows();
         model.addAttribute("dataRows", dataRows);
 
         return "redirect:/address_view";
@@ -89,15 +94,15 @@ public class AddressControler {
     @PostMapping("/update.do")
     public String updateAddressBook(@RequestParam String preemail, @RequestParam String prename, @RequestParam String prephone,
             @RequestParam String nexemail, @RequestParam String nexname, @RequestParam String nexphone, Model model) {
-        String userName = env.getProperty("spring.datasource.username");
-        String password = env.getProperty("spring.datasource.password");
-        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-
-        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+//        String userName = env.getProperty("spring.datasource.username");
+//        String password = env.getProperty("spring.datasource.password");
+//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
+//
+//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.changeRow(preemail, prename, prephone, nexemail, nexname, nexphone);
 
-        List<Address> dataRows = manager.getAllRows();
+        List<AddrBook> dataRows = manager.getAllRows();
         model.addAttribute("dataRows", dataRows);
 
         return "redirect:/address_view";
@@ -105,15 +110,15 @@ public class AddressControler {
 
     @GetMapping("/delete.do")
     public String deleteAddressBook(@RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("phone") String phone, Model model) {
-        String userName = env.getProperty("spring.datasource.username");
-        String password = env.getProperty("spring.datasource.password");
-        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-        log.debug(email);
-        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
+//        String userName = env.getProperty("spring.datasource.username");
+//        String password = env.getProperty("spring.datasource.password");
+//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
+//        log.debug(email);
+//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.removeRow(email, name, phone);
 
-        List<Address> dataRows = manager.getAllRows();
+        List<AddrBook> dataRows = manager.getAllRows();
         model.addAttribute("dataRows", dataRows);
 
         return "redirect:/address_view";

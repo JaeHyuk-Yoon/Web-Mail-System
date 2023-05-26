@@ -52,7 +52,7 @@ public class SystemController {
     @Value("${root.password}")
     private String ROOT_PASSWORD;
     @Value("${admin.id}")
-    private String ADMINISTRATOR;  //
+    private String ADMINISTRATOR;
     @Value("${james.control.port}")
     private Integer JAMES_CONTROL_PORT;
     @Value("${james.host}")
