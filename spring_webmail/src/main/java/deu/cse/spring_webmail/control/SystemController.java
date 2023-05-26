@@ -129,17 +129,9 @@ public class SystemController {
 
         return status;
     }
-
+   
     @GetMapping("/main_menu")
-//<<<<<<< HEAD
-//    public String mainmenu(Model model) {
-//        Pop3Agent pop3 = new Pop3Agent();
-//=======
-    
     public String mainmenu(Model model, @RequestParam(defaultValue = "1") Integer currentpage) {
-        
-//        Pop3Agent pop3 = new Pop3Agent();
-//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
         pop3.setHost((String) session.getAttribute("host"));
         pop3.setUserid((String) session.getAttribute("userid"));
         pop3.setPassword((String) session.getAttribute("password"));

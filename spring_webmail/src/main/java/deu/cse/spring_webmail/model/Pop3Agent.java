@@ -7,7 +7,7 @@ package deu.cse.spring_webmail.model;
 
 import deu.cse.spring_webmail.entity.Inbox;
 import deu.cse.spring_webmail.entity.InboxPK;
-import deu.cse.spring_webmail.repository.InboxRepository;
+//import deu.cse.spring_webmail.repository.InboxRepository;
 import deu.cse.spring_webmail.repository.TestRepository;
 import deu.cse.spring_webmail.repository.UsersRepository;
 import jakarta.mail.FetchProfile;
@@ -16,17 +16,14 @@ import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
-//<<<<<<< HEAD
-import java.sql.Blob;
-//import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-//=======
 import java.util.ArrayList;
-//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
+import java.util.Arrays;
+import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
+import java.sql.Blob;
+import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,6 +56,7 @@ public class Pop3Agent {
     @Getter private String subject;
     @Getter private String body;
     
+
 //    @Autowired
 //    InboxRepository inboxRepository;
     
@@ -69,6 +67,19 @@ public class Pop3Agent {
     MessageFormatter formatter;
     
     
+
+//    @Autowired
+//    InboxRepository inboxRepository;
+//    
+//    @Autowired
+//    UsersRepository usersRepository;
+//    
+//    @Autowired
+//    TestRepository testRepository;
+    
+    @Autowired
+    private TrashModel trashModel;
+
     
     public Pop3Agent(String host, String userid, String password) {
         this.host = host;
@@ -104,7 +115,13 @@ public class Pop3Agent {
 
             // Message에 DELETED flag 설정
             Message msg = folder.getMessage(msgid);
-            msg.setFlag(Flags.Flag.DELETED, really_delete);
+            
+            // 휴지통 기능 - trashbox로 메일 이동
+            boolean moveSuccess = trashModel.moveToTrashbox(msgid);
+
+            if (moveSuccess) {
+                msg.setFlag(Flags.Flag.DELETED, really_delete);
+            }
 
             // 폴더에서 메시지 삭제
             //

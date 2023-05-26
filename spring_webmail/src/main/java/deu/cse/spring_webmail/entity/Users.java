@@ -33,6 +33,7 @@ public class Users {
     @Column(name = "pwd_algorithm")
     private String pwdAlgorithm;
     
+
     @Column(name = "use_forwarding")
     private int useForwarding;
     

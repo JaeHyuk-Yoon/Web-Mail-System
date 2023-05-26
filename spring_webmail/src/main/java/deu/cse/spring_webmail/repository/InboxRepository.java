@@ -44,4 +44,10 @@ public interface InboxRepository extends JpaRepository<Inbox, InboxPK> {
 //                    nativeQuery = true)
 //    List<Inbox> findByMineSendMail(String sender);
     
+//<<<<<<< HEAD
+//=======
+    List<Inbox> findBySender(String sender);
+    List<Inbox> findByMessageName(String messageName);
+//    
+//>>>>>>> ab6db2ea7e3d69473fa92bf9e669f89b2aacdfd2
 }

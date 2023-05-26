@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\JaeHyuk\Desktop\webmail\spring_webmail\src\main\java\deu\cse\spring_webmail\ServletInitializer.java
 C:\Users\JaeHyuk\Desktop\webmail\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\AddrBook.java
 C:\Users\JaeHyuk\Desktop\webmail\spring_webmail\src\main\java\deu\cse\spring_webmail\model\UserAdminAgent.java
@@ -28,3 +29,32 @@ C:\Users\JaeHyuk\Desktop\webmail\spring_webmail\src\main\java\deu\cse\spring_web
 C:\Users\JaeHyuk\Desktop\webmail\spring_webmail\src\main\java\deu\cse\spring_webmail\control\WriteController.java
 C:\Users\JaeHyuk\Desktop\webmail\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\SpoolPK.java
 C:\Users\JaeHyuk\Desktop\webmail\spring_webmail\src\main\java\deu\cse\spring_webmail\model\MessageParser.java
+=======
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\control\WriteController.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\SpringWebmailApplication.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\PropertyReader.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\control\SystemController.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\DeadLetter.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\model\SmtpAgent.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\ServletInitializer.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\control\ReadController.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\control\CommandType.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\repository\TestRepository.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\model\MessageParser.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\model\Pop3Agent.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\Spool.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\TrashboxPK.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\TestEntity.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\repository\TrashboxRepository.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\SpoolPK.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\model\UserAdminAgent.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\Inbox.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\repository\UsersRepository.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\repository\InboxRepository.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\DeadLetterPK.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\InboxPK.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\TestEntitytwo.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\Users.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\model\MessageFormatter.java
+C:\Users\asdf0\Desktop\testood\Web-Mail-System\spring_webmail\src\main\java\deu\cse\spring_webmail\entity\Trashbox.java
+>>>>>>> ab6db2ea7e3d69473fa92bf9e669f89b2aacdfd2

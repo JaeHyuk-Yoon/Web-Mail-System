@@ -2,6 +2,9 @@
 Test set: deu.cse.spring_webmail.SpringWebmailApplicationTests
 -------------------------------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ab6db2ea7e3d69473fa92bf9e669f89b2aacdfd2
 Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 5.857 s <<< FAILURE! - in deu.cse.spring_webmail.SpringWebmailApplicationTests
 contextLoads  Time elapsed: 0.011 s  <<< ERROR!
 java.lang.IllegalStateException: Failed to load ApplicationContext
@@ -10,6 +13,9 @@ Caused by: org.springframework.beans.factory.BeanCreationException: Error creati
 Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception; nested exception is org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$DataSourceBeanCreationException: Failed to determine a suitable driver class
 Caused by: org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$DataSourceBeanCreationException: Failed to determine a suitable driver class
 
+<<<<<<< HEAD
 =======
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.94 s - in deu.cse.spring_webmail.SpringWebmailApplicationTests
 >>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
+=======
+>>>>>>> ab6db2ea7e3d69473fa92bf9e669f89b2aacdfd2

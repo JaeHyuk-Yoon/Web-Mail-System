@@ -2,14 +2,17 @@ deu\cse\spring_webmail\control\WriteController.class
 deu\cse\spring_webmail\entity\TestEntitytwo.class
 deu\cse\spring_webmail\ServletInitializer.class
 deu\cse\spring_webmail\entity\TestEntity.class
+deu\cse\spring_webmail\entity\Trashbox.class
 deu\cse\spring_webmail\repository\TestRepository.class
 deu\cse\spring_webmail\entity\Spool.class
+deu\cse\spring_webmail\entity\TrashboxPK.class
 deu\cse\spring_webmail\entity\Users.class
 deu\cse\spring_webmail\repository\InboxRepository.class
 deu\cse\spring_webmail\entity\SpoolPK.class
 deu\cse\spring_webmail\repository\UsersRepository.class
 deu\cse\spring_webmail\entity\DeadLetterPK.class
 deu\cse\spring_webmail\PropertyReader.class
+deu\cse\spring_webmail\repository\TrashboxRepository.class
 deu\cse\spring_webmail\model\MessageParser.class
 deu\cse\spring_webmail\control\SystemController.class
 deu\cse\spring_webmail\model\MessageFormatter.class
