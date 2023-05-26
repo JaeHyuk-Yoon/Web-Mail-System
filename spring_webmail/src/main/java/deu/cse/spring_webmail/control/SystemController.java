@@ -52,11 +52,14 @@ public class SystemController {
     @Value("${root.password}")
     private String ROOT_PASSWORD;
     @Value("${admin.id}")
-    private String ADMINISTRATOR;  //
+    private String ADMINISTRATOR;
     @Value("${james.control.port}")
     private Integer JAMES_CONTROL_PORT;
     @Value("${james.host}")
     private String JAMES_HOST;
+    
+    @Autowired
+    private Pop3Agent pop3;
 
     @GetMapping("/")
     public String index() {
@@ -126,10 +129,9 @@ public class SystemController {
 
         return status;
     }
-
+   
     @GetMapping("/main_menu")
     public String mainmenu(Model model, @RequestParam(defaultValue = "1") Integer currentpage) {
-        Pop3Agent pop3 = new Pop3Agent();
         pop3.setHost((String) session.getAttribute("host"));
         pop3.setUserid((String) session.getAttribute("userid"));
         pop3.setPassword((String) session.getAttribute("password"));
@@ -141,7 +143,7 @@ public class SystemController {
     
     @GetMapping("/main_menu_fromme")
     public String mainmenuFromme(Model model, @RequestParam(defaultValue = "1") Integer currentpage) {
-        Pop3Agent pop3 = new Pop3Agent();
+//        Pop3Agent pop3 = new Pop3Agent();
         pop3.setHost((String) session.getAttribute("host"));
         pop3.setUserid((String) session.getAttribute("userid"));
         pop3.setPassword((String) session.getAttribute("password"));
@@ -164,10 +166,15 @@ public class SystemController {
     public String addUser() {
         return "admin/add_user";
     }
+    
+    @GetMapping("/join_user")
+    public String joinUser() {
+        return "join_user";
+    }
 
-    @PostMapping("/add_user.do")
+    @PostMapping("/add_user.do/{adminOrJoin}")
     public String addUserDo(@RequestParam String id, @RequestParam String password,
-            RedirectAttributes attrs) {
+            RedirectAttributes attrs, @PathVariable String adminOrJoin) {
         log.debug("add_user.do: id = {}, password = {}, port = {}",
                 id, password, JAMES_CONTROL_PORT);
 
@@ -186,8 +193,13 @@ public class SystemController {
         } catch (Exception ex) {
             log.error("add_user.do: 시스템 접속에 실패했습니다. 예외 = {}", ex.getMessage());
         }
-
-        return "redirect:/admin_menu";
+        
+        if(adminOrJoin.equals("join")) {
+            return "redirect:/";
+        }
+        else {
+            return "redirect:/admin_menu";
+        }
     }
 
     @GetMapping("/delete_user")

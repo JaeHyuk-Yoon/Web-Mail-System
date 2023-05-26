@@ -49,12 +49,15 @@ public class ReadController {
     private HttpServletRequest request;
     @Value("${file.download_folder}")
     private String DOWNLOAD_FOLDER;
+    
+    @Autowired
+    private Pop3Agent pop3;
 
     @GetMapping("/show_message")
     public String showMessage(@RequestParam Integer msgid, Model model) {
         log.debug("download_folder = {}", DOWNLOAD_FOLDER);
         
-        Pop3Agent pop3 = new Pop3Agent();
+        //Pop3Agent pop3 = new Pop3Agent();
         pop3.setHost((String) session.getAttribute("host"));
         pop3.setUserid((String) session.getAttribute("userid"));
         pop3.setPassword((String) session.getAttribute("password"));
@@ -119,11 +122,18 @@ public class ReadController {
         String userid = (String) session.getAttribute("userid");
         String password = (String) session.getAttribute("password");
 
-        Pop3Agent pop3 = new Pop3Agent(host, userid, password);
+//<<<<<<< HEAD
+//        Pop3Agent pop3 = new Pop3Agent(host, userid, password);
+        pop3.setHost((String) session.getAttribute("host"));
+        pop3.setUserid((String) session.getAttribute("userid"));
+        pop3.setPassword((String) session.getAttribute("password"));
         
+//=======
+        // Pop3Agent pop3 = new Pop3Agent(host, userid, password);
+//>>>>>>> ab6db2ea7e3d69473fa92bf9e669f89b2aacdfd2
         boolean deleteSuccessful = pop3.deleteMessage(msgId, true);
         if (deleteSuccessful) {
-            attrs.addFlashAttribute("msg", "메시지 삭제를 성공하였습니다.");
+            attrs.addFlashAttribute("msg", "메시지를 휴지통으로 이동했습니다.");
         } else {
             attrs.addFlashAttribute("msg", "메시지 삭제를 실패하였습니다.");
         }

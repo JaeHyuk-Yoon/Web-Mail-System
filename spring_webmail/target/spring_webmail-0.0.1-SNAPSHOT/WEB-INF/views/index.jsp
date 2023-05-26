@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="deu.cse.spring_webmail.control.CommandType"%>
 
-<!DOCTYPE html>
+<!DOCTYPE html> <!-- HTML5를 의미함 -->
 
 <html>
     <head>
@@ -24,7 +24,8 @@
                 사용자: <input type="text" name="userid" size="20" autofocus> <br />
                 암&nbsp;&nbsp;&nbsp;호: <input type="password" name="passwd" size="20"> <br /> <br />
                 <input type="submit" value="로그인" name="B1">&nbsp;&nbsp;&nbsp;
-                <input type="reset" value="다시 입력" name="B2">
+                <input type="reset" value="다시 입력" name="B2">&nbsp;&nbsp;&nbsp;
+                <a href="join_user">회원 가입</a>
             </form>
         </div>
 

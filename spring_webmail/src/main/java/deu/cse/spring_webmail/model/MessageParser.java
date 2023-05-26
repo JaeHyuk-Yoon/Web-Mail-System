@@ -5,20 +5,32 @@
 package deu.cse.spring_webmail.model;
 
 import deu.cse.spring_webmail.PropertyReader;
+import deu.cse.spring_webmail.entity.Inbox;
+import deu.cse.spring_webmail.repository.InboxRepository;
 import jakarta.activation.DataHandler;
 import jakarta.mail.Address;
+import jakarta.mail.Header;
 import jakarta.mail.Message;
 import jakarta.mail.Multipart;
 import jakarta.mail.Part;
 import jakarta.mail.internet.MimeUtility;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -38,6 +50,12 @@ public class MessageParser {
     @Getter @Setter private String body;
     @Getter @Setter private String fileName;
     @Getter @Setter private String downloadTempDir = "C:/temp/download/";
+    @Getter @Setter private String showCheck;
+    @Getter @Setter private String messageId;
+    private int show;
+    
+    @Autowired
+    private InboxRepository inboxRepository;
     
     public MessageParser(Message message, String userid, HttpServletRequest request) {
         this(message, userid);
@@ -49,12 +67,13 @@ public class MessageParser {
             f.mkdir();
         }
     }
-
+    
     public boolean parse(boolean parseBody) {
         boolean status = false;
 
         try {
             getEnvelope(message);
+            //createShowCheck();
             if (parseBody) {
                 getPart(message);
             }
@@ -82,6 +101,7 @@ public class MessageParser {
         subject = message.getSubject();
         sentDate = message.getSentDate().toString();
         sentDate = sentDate.substring(0, sentDate.length() - 8);  // 8 for "KST 20XX"
+        
     }
 
     // ref: http://www.oracle.com/technetwork/java/faq-135477.html#readattach
@@ -104,7 +124,6 @@ public class MessageParser {
                 String filename = MimeUtility.decodeText(p.getFileName());
                 // 파일명에 " "가 있을 경우 서블릿에 파라미터로 전달시 문제 발생함.
                 // " "를 모두 "_"로 대체함.
-//              
                 DataHandler dh = p.getDataHandler();
                 FileOutputStream fos = new FileOutputStream(tempUserDir + File.separator + filename);
                 dh.writeTo(fos);
@@ -162,5 +181,96 @@ public class MessageParser {
         int end = buffer.length() - 1;
         buffer.delete(start, end);
         return buffer.toString();
+    }
+    
+    public List<Inbox> getMyMail() {
+        return inboxRepository.findByRepositoryName(userid);
+    }
+    
+    //일단 DB에서 내가 받은 메일 다 빼와서 코드를 통해 MessageBody sentDate, Sender 비교하고 같은거 끼리 showcheck값 부여
+    public void createShowCheck(List<Inbox> dbMessages) {
+
+        Inbox inbox = compareMessageBody(dbMessages);
+        
+        show = inbox.getShowCheck();
+        
+        if (show == 1) {
+            showCheck = "읽음";
+        }
+        else {
+            showCheck = "안읽음";
+        }
+    }
+    
+    public Inbox updateShowCheck(List<Inbox> dbMessages) {
+        
+        Inbox inbox = compareMessageBody(dbMessages);
+        
+        show = inbox.getShowCheck();
+        log.error("after compare");
+        
+        if (show == 0) {
+            //update
+            inbox.setShowCheck(1);
+            return inbox;
+        }
+        return null;
+    }
+    
+    //"inbox" DB에서 내가받은 메일들 가져오고 message_body 
+    // 현재 내가 받은 메일들 중에서 message_body가 단일 message객체.toString이랑 같은지 확인
+    private Inbox compareMessageBody(List<Inbox> dbMessages) {
+        
+        try {
+            for(Inbox dbMessage : dbMessages) {
+                Blob blob = dbMessage.getMessageBody();
+                byte[] bdata = blob.getBytes(1, (int)blob.length());
+                String sMessageBody = new String(bdata);
+                
+                if( fromAddress.equals(parseSender(sMessageBody)) && message.getSentDate().toString().equals(parseSentDate(sMessageBody)) ) {
+                    return dbMessage;
+                }
+            }
+        } catch (Exception ex) {
+            log.error("MessageParser.compareMessageBody() - Exception : {}", ex.getMessage());
+        }
+        return null;
+    }
+    
+    private String parseSender(String body) {
+        String[] arrays = body.split("\\n");
+        
+        for(String array : arrays) {
+            String[] lineArray = array.split(":");
+            if (lineArray[0].equals("From")) {
+                return lineArray[1].substring(1, lineArray[1].length()-1);
+            }
+        }
+        return "";
+    }
+    
+    private String parseSentDate(String body) {
+        String[] arrays = body.split("\\n");
+        
+        for(String array : arrays) {
+            String[] lineArray = array.split(":");
+            
+            if (lineArray[0].equals("Date")) {
+               DateFormat dateFormate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+               
+               SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+               
+               try {
+                   Date date = dateFormate.parse(array.substring(6));
+                   String afterDate = sdf.format(date);
+                   
+                   return afterDate;
+                   
+               } catch (Exception ex) {
+                   log.error("MessageParser.parseSentDate() - Exception : {}", ex.getMessage());
+               }
+            }
+        }
+        return "";
     }
 }

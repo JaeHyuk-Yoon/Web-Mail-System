@@ -24,7 +24,7 @@
         <div id="main">
             추가로 등록할 사용자 ID와 암호를 입력해 주시기 바랍니다. <br> <br>
 
-            <form name="AddUser" action="add_user.do" method="POST">
+            <form name="AddUser" action="add_user.do/admin" method="POST">
                 <table border="0" align="left">
                     <tr>
                         <td>사용자 ID</td>
