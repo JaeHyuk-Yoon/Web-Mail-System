@@ -21,4 +21,5 @@ deu\cse\spring_webmail\entity\InboxPK.class
 deu\cse\spring_webmail\SpringWebmailApplication.class
 deu\cse\spring_webmail\entity\DeadLetter.class
 deu\cse\spring_webmail\control\CommandType.class
+deu\cse\spring_webmail\control\AddressControler.class
 deu\cse\spring_webmail\model\Pop3Agent.class

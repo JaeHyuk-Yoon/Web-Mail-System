@@ -1,6 +1,7 @@
 <%-- 
-    Document   : write_mail.jsp
-    Author     : jongmin
+    Document   : write_tome
+    Created on : 2023. 5. 3., 오후 11:26:14
+    Author     : User
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,7 +14,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>메일 쓰기 화면</title>
+        <title>내게 쓰기 화면</title>
         <link type="text/css" rel="stylesheet" href="css/main_style.css" />
     </head>
     <body>
@@ -25,14 +26,8 @@
 
         <div id="main">
             <%-- <jsp:include page="mail_send_form.jsp" /> --%>
-            <form enctype="multipart/form-data" method="POST" action="write_mail.do" >
+            <form enctype="multipart/form-data" method="POST" action="write_tome.do" >
                 <table>
-                    <tr>
-                        <td> 수신 </td>
-                        <td> <input type="text" name="to" size="80" value="${!empty param['sender'] ? param['sender'] : ''}"
-            <!--    value=<%=request.getParameter("recv") == null ? "" : request.getParameter("recv")%>  -->
-                        </td>
-                    </tr>
                     <tr>
                         <td>참조</td>
                         <td> <input type="text" name="cc" size="80">  </td>

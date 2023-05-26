@@ -32,7 +32,7 @@ public class UserAdminAgent {
     private String ROOT_ID;
     private String ROOT_PASSWORD;
     private String ADMIN_ID;
-    // private final String EOL = "\n";
+    //
     private final String EOL = "\r\n";
     private String cwd;
 
@@ -88,11 +88,11 @@ public class UserAdminAgent {
 
             // 2: response for "adduser" command
             java.util.Arrays.fill(messageBuffer, (byte) 0);
-            //if (is.available() > 0) {
+            //
             is.read(messageBuffer);
             String recvMessage = new String(messageBuffer);
             log.debug(recvMessage);
-            //}
+            //
             // 3: 기존 메일사용자 여부 확인
             if (recvMessage.contains("added")) {
                 status = true;
@@ -106,10 +106,9 @@ public class UserAdminAgent {
         } catch (Exception ex) {
             log.error("addUser 예외: {}", ex.getMessage());
             status = false;
-        } finally {
-            // 5: 상태 반환
-            return status;
         }
+        // 5: 상태 반환
+        return status;
     }  // addUser()
 
     public List<String> getUserList() {
@@ -139,9 +138,8 @@ public class UserAdminAgent {
             quit();
         } catch (Exception ex) {
             log.error("getUserList(): 예외 = {}", ex.getMessage());
-        } finally {
-            return userList;
         }
+        return userList;
     }  // getUserList()
 
     private List<String> parseUserList(String message) {
@@ -201,9 +199,8 @@ public class UserAdminAgent {
             quit();
         } catch (Exception ex) {
             log.error("deleteUsers(): 예외 = {}", ex.getMessage());
-        } finally {
-            return status;
         }
+        return status;
     }  // deleteUsers()
 
     public boolean verify(String userid) {
@@ -227,9 +224,8 @@ public class UserAdminAgent {
             quit();  // quit command
         } catch (IOException ex) {
             log.error("verify(): 예외 = {}", ex.getMessage());
-        } finally {
-            return status;
         }
+        return status;
     }
 
     private boolean connect() {
@@ -261,7 +257,7 @@ public class UserAdminAgent {
 
             // 5: welcome message 수신
             java.util.Arrays.fill(messageBuffer, (byte) 0);
-            // if (is.available() > 0) {
+            //
             is.read(messageBuffer);
             recvMessage = new String(messageBuffer);
 
@@ -287,7 +283,7 @@ public class UserAdminAgent {
             os.write(quitCommand.getBytes());
             // 2: quit 명령에 대한 응답 수신
             java.util.Arrays.fill(messageBuffer, (byte) 0);
-            //if (is.available() > 0) {
+            //
             is.read(messageBuffer);
             // 3: 메시지 분석
             String recvMessage = new String(messageBuffer);
@@ -298,8 +294,7 @@ public class UserAdminAgent {
             }
         } catch (IOException ex) {
             log.error("quit() 예외: {}", ex);
-        } finally {
-            return status;
         }
+        return status;
     }
 }

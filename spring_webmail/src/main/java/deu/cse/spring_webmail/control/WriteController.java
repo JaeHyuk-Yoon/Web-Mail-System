@@ -121,4 +121,39 @@ public class WriteController {
         }
         return status;
     }  // sendMessage()
+    
+    @GetMapping("/write_tome")
+    public String writeToMe() {
+        log.debug("write_mail called...");
+        session.removeAttribute("sender");  // 220612 LJM - 메일 쓰기 시는 
+        return "write_mail/write_tome";
+    }
+    
+    @PostMapping("/write_tome.do")
+    public String writeToMeDo(@RequestParam String cc, @RequestParam String subj, @RequestParam String body, 
+            @RequestParam(name="file1") MultipartFile upFile, RedirectAttributes attrs) {
+        log.debug("write_tome.do: cc = {}, subj = {}, body = {}, file1 = {}",
+                 cc, subj, body, upFile.getOriginalFilename());
+        // FormParser 클래스의 기능은 매개변수로 모두 넘어오므로 더이상 필요 없음.
+        // 업로드한 파일이 있으면 해당 파일을 UPLOAD_FOLDER에 저장해 주면 됨.
+        if (!"".equals(upFile.getOriginalFilename())) {
+            String basePath = ctx.getRealPath(UPLOAD_FOLDER);
+            log.debug("{} 파일을 {} 폴더에 저장...", upFile.getOriginalFilename(), basePath);
+            File f = new File(basePath + File.separator + upFile.getOriginalFilename());
+            try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(f))) {
+                bos.write(upFile.getBytes());
+            } catch (IOException e) {
+                log.error("upload.do: 오류 발생 - {}", e.getMessage());
+            }
+        }
+        boolean sendSuccessful = sendMessage(session.getAttribute("userid").toString(), cc, subj, body, upFile);
+        if (sendSuccessful) {
+            attrs.addFlashAttribute("msg", "메일 전송이 성공했습니다.");
+        } else {
+            attrs.addFlashAttribute("msg", "메일 전송이 실패했습니다.");
+        }
+        
+        return "redirect:/main_menu";
+    }
+    
 }

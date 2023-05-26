@@ -52,7 +52,7 @@ public class SystemController {
     @Value("${root.password}")
     private String ROOT_PASSWORD;
     @Value("${admin.id}")
-    private String ADMINISTRATOR;  //  = "admin";
+    private String ADMINISTRATOR;  //
     @Value("${james.control.port}")
     private Integer JAMES_CONTROL_PORT;
     @Value("${james.host}")
@@ -89,19 +89,19 @@ public class SystemController {
                     if (isAdmin(userid)) {
                         // HttpSession 객체에 userid를 등록해 둔다.
                         session.setAttribute("userid", userid);
-                        // response.sendRedirect("admin_menu.jsp");
+                        //
                         url = "redirect:/admin_menu";
                     } else {
                         // HttpSession 객체에 userid와 password를 등록해 둔다.
                         session.setAttribute("userid", userid);
                         session.setAttribute("password", password);
-                        // response.sendRedirect("main_menu.jsp");
+                        //
                         url = "redirect:/main_menu";  // URL이 http://localhost:8080/webmail/main_menu 이와 같이 됨.
                         // url = "/main_menu";  // URL이 http://localhost:8080/webmail/login.do?menu=91 이와 같이 되어 안 좋음
                     }
                 } else {
-                    // RequestDispatcher view = request.getRequestDispatcher("login_fail.jsp");
-                    // view.forward(request, response);
+                    //
+                    //
                     url = "redirect:/login_fail";
                 }
                 break;
@@ -131,15 +131,34 @@ public class SystemController {
     }
 
     @GetMapping("/main_menu")
-    public String mainmenu(Model model) {
+//<<<<<<< HEAD
+//    public String mainmenu(Model model) {
+//        Pop3Agent pop3 = new Pop3Agent();
+//=======
+    
+    public String mainmenu(Model model, @RequestParam(defaultValue = "1") Integer currentpage) {
+        
+//        Pop3Agent pop3 = new Pop3Agent();
+//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
+        pop3.setHost((String) session.getAttribute("host"));
+        pop3.setUserid((String) session.getAttribute("userid"));
+        pop3.setPassword((String) session.getAttribute("password"));
+
+        String messageList = pop3.getMessageList(currentpage);
+        model.addAttribute("messageList", messageList);
+        return "main_menu";
+    }
+    
+    @GetMapping("/main_menu_fromme")
+    public String mainmenuFromme(Model model, @RequestParam(defaultValue = "1") Integer currentpage) {
 //        Pop3Agent pop3 = new Pop3Agent();
         pop3.setHost((String) session.getAttribute("host"));
         pop3.setUserid((String) session.getAttribute("userid"));
         pop3.setPassword((String) session.getAttribute("password"));
 
-        String messageList = pop3.getMessageList();
+        String messageList = pop3.getMessageFromMeList(currentpage);
         model.addAttribute("messageList", messageList);
-        return "main_menu";
+        return "main_menu_fromme";
     }
 
     @GetMapping("/admin_menu")
@@ -172,8 +191,8 @@ public class SystemController {
             UserAdminAgent agent = new UserAdminAgent(JAMES_HOST, JAMES_CONTROL_PORT, cwd,
                     ROOT_ID, ROOT_PASSWORD, ADMINISTRATOR);
 
-            // if (addUser successful)  사용자 등록 성공 팦업창
-            // else 사용자 등록 실패 팝업창
+            //사용자 등록 성공 팦업창
+            //사용자 등록 실패 팝업창
             if (agent.addUser(id, password)) {
                 attrs.addFlashAttribute("msg", String.format("사용자(%s) 추가를 성공하였습니다.", id));
             } else {

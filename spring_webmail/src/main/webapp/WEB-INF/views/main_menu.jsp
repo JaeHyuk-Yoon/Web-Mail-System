@@ -30,6 +30,12 @@
             alert("${msg}");
             </c:if>
         </script>
+        <script type="text/javascript">
+            function getConfirmResult(){
+                var result = confirm("삭제하시겠습니까?");
+                return result;
+            }
+        </script>
     </head>
     <body>
         <%@include file="header.jspf"%>

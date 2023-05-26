@@ -20,6 +20,7 @@ body {
 table {
     margin: 0px 15px 0 15px;
     border: thin solid black;
+    width: calc(100% - 300px)
 }
 
 td, th {
@@ -32,7 +33,6 @@ th {
     background-color:  gray;
     color: white;
 }
-
 
 td#sender {
     width: 20%;
@@ -71,7 +71,7 @@ td#subject {
 #sidebar {
     margin: 20px 10px 10px 10px;
     padding: 10px;
-    width: 150px;
+    width: 200px;
     float: left;
 }
 
@@ -79,6 +79,7 @@ td#subject {
     margin-top: 50px;
     margin-left: 190px;
     text-align: left;
+    width: calc(100% - 190px);
 }
 
 #addrbook, #msgBody {
@@ -116,4 +117,16 @@ a:hover {
     margin: 20px 10px 0px 10px;
     padding: 10px;
     clear: left;
+}
+
+ul #page {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    width: calc(100% - 300px)
+}
+
+li #page {
+    margin: 0px 5px;
+    padding: 5px;
 }

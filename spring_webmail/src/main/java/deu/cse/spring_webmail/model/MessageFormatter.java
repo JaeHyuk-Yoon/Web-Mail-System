@@ -37,17 +37,20 @@ public class MessageFormatter {
     @Getter private String sender;
     @Getter private String subject;
     @Getter private String body;
-    List<Inbox> inboxList;
+
     
     @Autowired
     InboxRepository inboxRepository;
 
-    public String getMessageTable(Message[] messages) {
+//    public String getMessageTable(Message[] messages) {
+//=======
+//    
+    public String getMessageTable(Message[] messages, int startmail, int endmail) {
+//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
         StringBuilder buffer = new StringBuilder();
         
         List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
         
-        log.error("atfer getDbMessages");
         
         // 메시지 제목 보여주기
         buffer.append("<table>");  // table start
@@ -60,7 +63,7 @@ public class MessageFormatter {
                 + " <th> 삭제 </td>   "
                 + " </tr>");
 
-        for (int i = messages.length - 1; i >= 0; i--) {
+        for (int i = endmail - 1; i >= startmail; i--) {
             MessageParser parser = new MessageParser(messages[i], userid);
             parser.parse(false);  // envelope 정보만 필요
             
@@ -69,7 +72,7 @@ public class MessageFormatter {
             // 메시지 헤더 포맷
             // 추출한 정보를 출력 포맷 사용하여 스트링으로 만들기
             buffer.append("<tr> "
-                    + " <td id=no>" + (i + 1) + " </td> "
+                    + " <td id=no>" + parser.getMessageNumber() + " </td> "
                     + " <td id=sender>" + parser.getFromAddress() + "</td>"
                     + " <td id=subject> "
                     + " <a href=show_message?msgid=" + (i + 1) + " title=\"메일 보기\"> "
@@ -78,21 +81,25 @@ public class MessageFormatter {
                     + " <td id=check>"+ parser.getShowCheck() + "</td>"
                     + " <td id=delete>"
                     + "<a href=delete_mail.do"
-                    + "?msgid=" + (i + 1) + "> 삭제 </a>" + "</td>"
+                    + "?msgid=" + parser.getMessageNumber() + "  onclick=\"return confirm('삭제하시겠습니까?');\"> 삭제 </a>" + "</td>"
                     + " </tr>");
         }
         buffer.append("</table>");
 
         return buffer.toString();
-//        return "MessageFormatter 테이블 결과";
+//      
     }
 
     public String getMessage(Message message) {
         StringBuilder buffer = new StringBuilder();
 
+//<<<<<<< HEAD
         List<Inbox> inboxList = inboxRepository.findByRepositoryName(userid);
         
         // MessageParser parser = new MessageParser(message, userid);
+//=======
+//        //
+//>>>>>>> 20ff4424b871dea203e61496e658794f0fa92470
         MessageParser parser = new MessageParser(message, userid, request);
         parser.parse(true);
         
@@ -117,7 +124,7 @@ public class MessageFormatter {
         if (attachedFile != null) {
             buffer.append("<br> <hr> 첨부파일: <a href=download"
                     + "?userid=" + this.userid
-                    + "&filename=" + attachedFile.replaceAll(" ", "%20")
+                    + "&filename=" + attachedFile.replace(" ", "%20")
                     + " target=_top> " + attachedFile + "</a> <br>");
         }
 
