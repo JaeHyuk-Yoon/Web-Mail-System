@@ -171,7 +171,7 @@ public class TrashModel {
 //            MessageFormatter formatter = new MessageFormatter(userid);
             formatter.setUserid(userid);
             formatter.setRequest(request);
-            result = formatter.getMessage(message);
+            result = formatter.getMessageContent(message);
 
             MessageParser parser = new MessageParser(message, userid, request);
             parser.parse(true);
