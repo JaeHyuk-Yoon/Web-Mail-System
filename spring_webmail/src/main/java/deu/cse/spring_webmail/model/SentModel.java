@@ -128,7 +128,7 @@ public class SentModel {
 //            MessageFormatter formatter = new MessageFormatter(sender);
             formatter.setSender(sender);
             formatter.setRequest(request);
-            result = formatter.getMessage(message);
+            result = formatter.getMessageContent(message);
 
             MessageParser parser = new MessageParser(message, userid, request);
             parser.parse(true);
