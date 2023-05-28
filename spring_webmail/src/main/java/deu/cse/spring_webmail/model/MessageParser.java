@@ -54,8 +54,6 @@ public class MessageParser {
     @Getter @Setter private String messageId;
     private int show;
     
-    @Autowired
-    private InboxRepository inboxRepository;
     
     public MessageParser(Message message, String userid, HttpServletRequest request) {
         this(message, userid);
@@ -181,10 +179,6 @@ public class MessageParser {
         int end = buffer.length() - 1;
         buffer.delete(start, end);
         return buffer.toString();
-    }
-    
-    public List<Inbox> getMyMail() {
-        return inboxRepository.findByRepositoryName(userid);
     }
     
     //일단 DB에서 내가 받은 메일 다 빼와서 코드를 통해 MessageBody sentDate, Sender 비교하고 같은거 끼리 showcheck값 부여

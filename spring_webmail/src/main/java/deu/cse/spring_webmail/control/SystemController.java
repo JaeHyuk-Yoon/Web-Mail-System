@@ -171,7 +171,7 @@ public class SystemController {
     public String joinUser() {
         return "join_user";
     }
-// , @PathVariable String adminOrJoin
+
     @PostMapping("/add_user.do")
     public String addUserDo(@RequestParam String id, @RequestParam String password, @RequestParam String joinOrAdmin,
             RedirectAttributes attrs) {

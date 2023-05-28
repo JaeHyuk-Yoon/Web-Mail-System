@@ -51,13 +51,6 @@ public class AddressControler {
     
     @GetMapping("/address_view")
     public String insertTable(Model model) {
-//        String userName = env.getProperty("spring.datasource.username");
-//        String password = env.getProperty("spring.datasource.password");
-//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-//        log.debug("ip={}, port={}", this.mysqlServerIp, this.mysqlServerPort);
-
-//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
-//        AddressManager manager = new AddressManager();
         manager.setUserid((String) session.getAttribute("userid"));
         List<AddrBook> dataRows = manager.getAllRows();
         model.addAttribute("dataRows", dataRows);
@@ -77,11 +70,6 @@ public class AddressControler {
 
     @PostMapping("/insert.do")
     public String insertAddressBook(@RequestParam String email, @RequestParam String name, @RequestParam String phone, Model model) {
-//        String userName = env.getProperty("spring.datasource.username");
-//        String password = env.getProperty("spring.datasource.password");
-//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-//
-//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.addRow(email, name, phone);
 
@@ -94,11 +82,6 @@ public class AddressControler {
     @PostMapping("/update.do")
     public String updateAddressBook(@RequestParam String preemail, @RequestParam String prename, @RequestParam String prephone,
             @RequestParam String nexemail, @RequestParam String nexname, @RequestParam String nexphone, Model model) {
-//        String userName = env.getProperty("spring.datasource.username");
-//        String password = env.getProperty("spring.datasource.password");
-//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-//
-//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.changeRow(preemail, prename, prephone, nexemail, nexname, nexphone);
 
@@ -110,11 +93,6 @@ public class AddressControler {
 
     @GetMapping("/delete.do")
     public String deleteAddressBook(@RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("phone") String phone, Model model) {
-//        String userName = env.getProperty("spring.datasource.username");
-//        String password = env.getProperty("spring.datasource.password");
-//        String jdbcDriver = env.getProperty("spring.datasource.driver-class-name");
-//        log.debug(email);
-//        AddressManager manager = new AddressManager(mysqlServerIp, mysqlServerPort, userName, password, jdbcDriver);
         manager.setUserid((String) session.getAttribute("userid"));
         manager.removeRow(email, name, phone);
 

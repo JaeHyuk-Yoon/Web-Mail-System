@@ -18,36 +18,13 @@ import org.springframework.stereotype.Repository;
  */
 public interface InboxRepository extends JpaRepository<Inbox, InboxPK> {
     
-//    @Query(value = 
-//                    "SELECT * " +
-//                    "FROM inbox" +
-//                    "WHERE repository_name = :repository_name" +
-//                    "ORDER BY last_updated DESC",
-//                    nativeQuery = true)
-//    List<Inbox> findByReciveMail(String repository_name);
 
-//    @Query(value = 
-//                    "SELECT * " +
-//                    "FROM inbox" +
-//                    "WHERE repository_name = :repository_name" +
-//                    "ORDER BY last_updated DESC",
-//                    nativeQuery = true)
     List<Inbox> findByRecipients(String recipients);
     
     List<Inbox> findByRepositoryName(String repositoryName);
-    
-//    @Query(value = 
-//                    "SELECT * " +
-//                    "FROM inbox" +
-//                    "WHERE sender = :sender" +
-//                    "ORDER BY last_updated DESC",
-//                    nativeQuery = true)
-//    List<Inbox> findByMineSendMail(String sender);
-    
-//<<<<<<< HEAD
-//=======
+
     List<Inbox> findBySender(String sender);
+    
     List<Inbox> findByMessageName(String messageName);
-//    
-//>>>>>>> ab6db2ea7e3d69473fa92bf9e669f89b2aacdfd2
+
 }

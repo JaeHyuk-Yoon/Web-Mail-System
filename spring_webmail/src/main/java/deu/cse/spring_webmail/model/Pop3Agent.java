@@ -8,7 +8,6 @@ package deu.cse.spring_webmail.model;
 import deu.cse.spring_webmail.entity.Inbox;
 import deu.cse.spring_webmail.entity.InboxPK;
 //import deu.cse.spring_webmail.repository.InboxRepository;
-import deu.cse.spring_webmail.repository.TestRepository;
 import deu.cse.spring_webmail.repository.UsersRepository;
 import jakarta.mail.FetchProfile;
 import jakarta.mail.Flags;

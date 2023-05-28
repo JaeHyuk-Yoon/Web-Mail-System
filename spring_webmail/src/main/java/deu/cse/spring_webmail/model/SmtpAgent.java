@@ -61,10 +61,7 @@ public class SmtpAgent {
         try {
             SMTPMessage msg = new SMTPMessage(session);
 
-            //
             msg.setFrom(new InternetAddress(this.userid));  // 200102 LJM - 테스트 목적으로 수정
-            //
-
 
             // setRecipient() can be called repeatedly if ';' or ',' exists
             if (this.to.indexOf(';') != -1) {
@@ -79,21 +76,13 @@ public class SmtpAgent {
                 msg.setRecipients(Message.RecipientType.CC, this.cc);
             }
 
-            //
-//          
             msg.setSubject(this.subj);
 
-            //
             msg.setHeader("User-Agent", "LJM-WM/0.1");
-            //
-            //
 
-            // body
             MimeBodyPart mbp = new MimeBodyPart();
             // Content-Type, Content-Transfer-Encoding 설정 의미 없음.
             // 자동으로 설정되는 것 같음. - LJM 041202
-            //
-            //
             mbp.setText(this.body);
 
             Multipart mp = new MimeMultipart();

@@ -6,7 +6,6 @@ package deu.cse.spring_webmail.model;
 
 import deu.cse.spring_webmail.entity.Inbox;
 import deu.cse.spring_webmail.repository.InboxRepository;
-import deu.cse.spring_webmail.repository.TestRepository;
 import deu.cse.spring_webmail.repository.UsersRepository;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -73,8 +72,7 @@ public class SentModel {
     @Autowired
     UsersRepository usersRepository;
 
-    @Autowired
-    TestRepository testRepository;
+
    
    // 보낸 메일 리스트 가져오는 함수
     public String getSentMessageList() {
@@ -139,6 +137,4 @@ public class SentModel {
             return result;
         }
     }
-
-   
 }

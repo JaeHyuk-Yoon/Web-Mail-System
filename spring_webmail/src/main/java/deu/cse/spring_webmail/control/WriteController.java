@@ -93,9 +93,7 @@ public class WriteController {
 
         // 1. toAddress, ccAddress, subject, body, file1 정보를 파싱하여 추출
 
-
         // 2.  request 객체에서 HttpSession 객체 얻기
-
 
         // 3. HttpSession 객체에서 메일 서버, 메일 사용자 ID 정보 얻기
         String host = (String) session.getAttribute("host");
