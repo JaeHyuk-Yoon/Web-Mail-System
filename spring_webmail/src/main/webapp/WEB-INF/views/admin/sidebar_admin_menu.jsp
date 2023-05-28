@@ -6,12 +6,19 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="deu.cse.spring_webmail.control.CommandType" %>
 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>웹메일 시스템 메뉴</title>
+        <script>
+            <c:if test="${!empty msg}">
+            alert("${msg}");
+            </c:if>
+        </script>
     </head>
     <body>
         <br> <br>

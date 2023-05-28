@@ -24,7 +24,7 @@
         <div id="main">
             회원가입할 사용자 ID와 암호를 입력해 주시기 바랍니다. <br> <br>
 
-            <form name="AddUser" action="add_user.do/join" method="POST">
+            <form name="AddUser" action="add_user.do" method="POST">
                 <table border="0" align="left">
                     <tr>
                         <td>사용자 ID</td>
@@ -33,6 +33,7 @@
                     <tr>
                         <td>암호 </td>
                         <td> <input type="password" name="password" value="" /> </td>
+                        <td> <input type="hidden" name="joinOrAdmin" value="join" /> </td>
                     </tr>
                     <tr>
                         <td colspan="2">

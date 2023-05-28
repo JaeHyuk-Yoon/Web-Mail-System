@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="deu.cse.spring_webmail.control.CommandType"%>
 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html> <!-- HTML5를 의미함 -->
 
 <html>
@@ -14,6 +16,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>로그인 화면</title>
         <link type="text/css" rel="stylesheet" href="css/main_style.css" />
+        <script>
+            <c:if test="${!empty msg}">
+            alert("${msg}");
+            </c:if>
+        </script>
     </head>
     <body>
         <%@include file="header.jspf"%>

@@ -68,11 +68,6 @@ public class Inbox implements Serializable {
     @Column(name = "message_attributes")
     @Lob
     private Blob messageAttributes;
-//<<<<<<< HEAD
-//    private String messageAttributes;
-//=======
-    
-//>>>>>>> ab6db2ea7e3d69473fa92bf9e669f89b2aacdfd2
     
     @Column(name = "last_updated")
     @Temporal(TemporalType.DATE)

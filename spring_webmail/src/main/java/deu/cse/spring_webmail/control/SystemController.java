@@ -62,7 +62,7 @@ public class SystemController {
     private Pop3Agent pop3;
 
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
         log.debug("index() called...");
         session.setAttribute("host", JAMES_HOST);
         session.setAttribute("debug", "false");
@@ -171,10 +171,10 @@ public class SystemController {
     public String joinUser() {
         return "join_user";
     }
-
-    @PostMapping("/add_user.do/{adminOrJoin}")
-    public String addUserDo(@RequestParam String id, @RequestParam String password,
-            RedirectAttributes attrs, @PathVariable String adminOrJoin) {
+// , @PathVariable String adminOrJoin
+    @PostMapping("/add_user.do")
+    public String addUserDo(@RequestParam String id, @RequestParam String password, @RequestParam String joinOrAdmin,
+            RedirectAttributes attrs) {
         log.debug("add_user.do: id = {}, password = {}, port = {}",
                 id, password, JAMES_CONTROL_PORT);
 
@@ -186,6 +186,8 @@ public class SystemController {
             //사용자 등록 성공 팦업창
             //사용자 등록 실패 팝업창
             if (agent.addUser(id, password)) {
+                log.error("agent adduer if enter !!!!!");
+//                log.error("attrs : {}", attrs.toString());
                 attrs.addFlashAttribute("msg", String.format("사용자(%s) 추가를 성공하였습니다.", id));
             } else {
                 attrs.addFlashAttribute("msg", String.format("사용자(%s) 추가를 실패하였습니다.", id));
@@ -194,7 +196,7 @@ public class SystemController {
             log.error("add_user.do: 시스템 접속에 실패했습니다. 예외 = {}", ex.getMessage());
         }
         
-        if(adminOrJoin.equals("join")) {
+        if(joinOrAdmin.equals("join")) {
             return "redirect:/";
         }
         else {

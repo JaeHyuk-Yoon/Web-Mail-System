@@ -217,8 +217,7 @@ public class MessageParser {
         return null;
     }
     
-    //"inbox" DB에서 내가받은 메일들 가져오고 message_body 
-    // 현재 내가 받은 메일들 중에서 message_body가 단일 message객체.toString이랑 같은지 확인
+    //"inbox" DB에서 내가받은 메일들 가져오고 Message Body에서 parse한 Sender랑 Date가 단일 message객체에서 가져온 fromAddress와 message.getSentDate()랑 같은지 확인
     private Inbox compareMessageBody(List<Inbox> dbMessages) {
         
         try {
